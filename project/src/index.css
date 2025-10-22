@@ -25,7 +25,7 @@ display: flex;
 }
 
  .navbar-nav{
-   gap: 30px;
+   gap: 10px;
  }
  .nav-last{
   display: flex;
@@ -35,13 +35,20 @@ display: flex;
  }
  .r1{
   position: absolute;
+  
+  display: flex;
+ }
+ .p3{
+  position: relative;
+  top:-20px ;
+  right: 230px;
  }
  .p4{
   position: relative;
   top: 500px;
  
   z-index: -9;
-  width: 105%;
+  width: 100%;
   
  }
  .p5{
@@ -54,7 +61,7 @@ display: flex;
  .p6{
   position: relative;
   width: 100%;
-  top: 125px;
+  top: 142px;
   
  }
  .page2p{
@@ -62,6 +69,98 @@ display: flex;
   justify-content: space-between;
   align-items: center;
  
-  gap: 380px;
+  gap: 370px;
   
  }
+
+
+
+ /* Media screen */
+ @media (max-width:992px){
+  body{
+   max-width: 100vw;
+   overflow-x: hidden;
+  }
+  .p1{
+    margin-left: -20rem;
+  
+ }
+ .navbar-toggler {
+
+  margin-left: 16rem;
+}
+
+
+.landing{
+  margin-top: -6px !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+}
+.landing p{
+  font-size: 80%;
+}
+.landing h1{
+  font-size: 180% !important;
+  width: 80% !important;
+} .landing button{
+  font-size: 80%;
+}
+
+.r1{
+  flex-direction: column;
+  
+}
+ .p2{
+ width: 20%;
+ }
+
+ .p3{
+  width: 100%;
+  
+  left: 1px;
+  top: 5px;
+}
+.p4{
+  width: 100%;
+  top: 480px;
+ 
+}
+.p5{
+  width: 100%;
+  top: 410px;
+  z-index: -9 !important;
+ 
+
+}
+.p6{
+  width: 100%;
+  top: 395px;
+  
+}
+.p7{
+    margin-left: -21px;
+}
+.p9{
+  margin-left: -12px;
+}
+.page2{
+  margin-top: 12rem;
+  
+}
+.page2 h1{
+  font-size: 180% !important;
+
+
+}
+.page2p{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem !important;
+}
+
+
+
+
+}
