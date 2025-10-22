@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Inter;
+  
+}
+body{
+  overflow-x: hidden;
+  
+}
+
+
+ .nav-list{
+display: flex; 
+
+} 
+.collapse{
+
+  justify-content: center;
+  
+  
+}
+
+ .navbar-nav{
+   gap: 30px;
+ }
+ .nav-last{
+  display: flex;
+  align-items: center;
+  text-align: center;
+  
+ }
+ .r1{
+  position: absolute;
+ }
+ .p4{
+  position: relative;
+  top: 500px;
+ 
+  z-index: -9;
+  width: 105%;
+  
+ }
+ .p5{
+  position: relative;
+  top: 210px;
+  z-index: -9;
+  width: 100%;
+ 
+ }
+ .p6{
+  position: relative;
+  width: 100%;
+  top: 125px;
+  
+ }
+ .page2p{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+ 
+  gap: 380px;
+  
+ }
