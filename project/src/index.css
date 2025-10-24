@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
 
 *{
   margin: 0;
@@ -38,10 +39,21 @@ display: flex;
   
   display: flex;
  }
+ .landing span{
+  font-family: MD Nichrome test;
+  font-size: 190%;
+  font-weight: 1000;
+
+ }
  .p3{
   position: relative;
   top:-20px ;
   right: 230px;
+ }
+ .p17{
+  position: relative;
+  top: 62px;
+  right: 145px;
  }
  .p4{
   position: relative;
@@ -69,14 +81,27 @@ display: flex;
   justify-content: space-between;
   align-items: center;
  
-  gap: 370px;
+  gap: 350px;
   
  }
+ .page3s span{
+  font-family: MD Nichrome Test;
+   
+  font-size: 220%;
+  width: 230%,
+
+ }
+ .signature {
+  font-family: 'Dancing Script', cursive;
+  font-size: 24px;
+  font-style: italic; 
+}
+
 
 
 
  /* Media screen */
- @media (max-width:992px){
+ @media (max-width:600px){
   body{
    max-width: 100vw;
    overflow-x: hidden;
@@ -117,26 +142,33 @@ display: flex;
  }
 
  .p3{
-  width: 100%;
+  width: 90%;
   
   left: 1px;
-  top: 5px;
+  top: 10px;
+}
+.p17{
+  top: 330px;
+  width: 10%;
+  right: 150px;
 }
 .p4{
   width: 100%;
-  top: 480px;
+  top: 650px;
+  height: 130px ;
  
 }
 .p5{
   width: 100%;
-  top: 410px;
+  top: 520px;
   z-index: -9 !important;
+  height: 130px;
  
 
 }
 .p6{
   width: 100%;
-  top: 395px;
+  top: 482px;
   
 }
 .p7{
@@ -146,7 +178,7 @@ display: flex;
   margin-left: -12px;
 }
 .page2{
-  margin-top: 12rem;
+  margin-top: 32rem !important;
   
 }
 .page2 h1{
