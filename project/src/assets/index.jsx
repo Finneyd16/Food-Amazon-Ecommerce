@@ -15,8 +15,14 @@ import P14 from './P14.png';
 import P15 from './P15.png';
 import P16 from './P16.png';
 import P17 from './P17.png';
+import P18 from './P18.png';
+import P19 from './P19.png';
+import P20 from './P20.png';
+import P21 from './P21.png';
+import P22 from './P22.png';
+import P23 from './P23.png';
 
 
 
 
-export {P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12,P13,P14,P15,P16,P17};
+export {P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12,P13,P14,P15,P16,P17,P18,P19,P20,P21,P22,P23};

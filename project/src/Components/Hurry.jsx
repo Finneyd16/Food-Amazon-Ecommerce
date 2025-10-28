@@ -6,7 +6,9 @@ import P12 from "../assets/P12.png";
 import P13 from "../assets/P13.png";
 import P14 from "../assets/P14.png";
 
+
 const Products = [
+  
   {
     id: "1",
     title: "Organic Almond Delight",
@@ -36,7 +38,7 @@ const Products = [
   },
 ];
 
-const ProductGrid = () => {
+const HurryGrid = () => {
     
   return (
     <>
@@ -45,7 +47,7 @@ const ProductGrid = () => {
           {Products.map((Product) => (
             <div key={Product.id} className="col-sm-12 col-md-6 col-lg-4">
               <div className=" d-flex flex-column">
-                <img src={Product.image} alt="" />
+                <img className={`${Product.category === "Coconut Flakes" ? "hurryimg" : "" }`} src={Product.image} alt="" />
                 <div style={{ marginLeft: "-18px" }} className="card-body">
                   <p className="text-muted small d-flex justify-content-between align-items-center">
                     {Product.category}
@@ -87,10 +89,10 @@ const ProductGrid = () => {
             </div>
           ))}
         </div>
-        <img className=" p14 col-sm-12 col-md-12 col-lg-12" src={P14} alt="" />
+        
       </div>
     </>
   );
 };
 
-export default ProductGrid;
+export default HurryGrid;

@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Calligraffitti&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 *{
   margin: 0;
@@ -84,6 +84,7 @@ display: flex;
   gap: 350px;
   
  }
+ 
  .page3s span{
   font-family: MD Nichrome Test;
    
@@ -92,11 +93,81 @@ display: flex;
 
  }
  .signature {
-  font-family: 'Dancing Script', cursive;
+  font-family: Calligraffitti;
   font-size: 24px;
   font-style: italic; 
 }
 
+
+.empty{
+  background-color: #00A859;
+  width: 28%;
+  height: 2px;
+  margin-top: -25px;
+  margin-bottom: 20px;
+}
+
+.others-card{
+  background-color: #00A859 !important;
+  position: absolute;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  border-radius: 9px !important;
+ 
+}
+.main-card{
+  border-radius: 9px !important;
+}
+.main-card button{
+  padding: 10px 30px;
+  border-radius: 9px;
+  background-color: white;
+  border-color: #00A859;
+  color: #00A859;
+  border: 1px solid;
+  
+}
+.others-card p{
+  
+  color: white;
+}
+.others-card button{
+  color: white;
+  background-color: #00A859;
+  border-color: white;
+  border: 1px solid;
+  padding: 10px 30px;
+  border-radius: 9px;
+
+
+}
+.others-card-body{
+  position: absolute;
+}
+
+.p21{
+ top: -30px;
+ position: relative;
+ width: 60px !important;
+ left: -100px;
+ 
+}
+.other-img{
+  padding:10px !important;
+}
+
+
+.page6p{
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+ 
+  gap: 350px;
+  
+ }
 
 
 
@@ -127,9 +198,12 @@ display: flex;
   font-size: 80%;
 }
 .landing h1{
-  font-size: 180% !important;
-  width: 80% !important;
-} .landing button{
+  font-size: 160% !important;
+  width: 100% !important;
+  text-align: center;
+
+} 
+.landing button{
   font-size: 80%;
 }
 
@@ -154,13 +228,13 @@ display: flex;
 }
 .p4{
   width: 100%;
-  top: 650px;
+  top: 560px;
   height: 130px ;
  
 }
 .p5{
   width: 100%;
-  top: 520px;
+  top: 410px;
   z-index: -9 !important;
   height: 130px;
  
@@ -168,7 +242,7 @@ display: flex;
 }
 .p6{
   width: 100%;
-  top: 482px;
+  top: 398px;
   
 }
 .p7{
@@ -176,6 +250,10 @@ display: flex;
 }
 .p9{
   margin-left: -12px;
+}
+.p17{
+  right: 180px;
+  top:340px;
 }
 .page2{
   margin-top: 32rem !important;
@@ -191,7 +269,72 @@ display: flex;
   flex-direction: column;
   gap: 2rem !important;
 }
+.p15{
+  width: 100%;
+}
+.page3s h1{
+  width: 100%;
+  font-size: 150%;
+  text-align: center;
+}
+.pmid {
+  font-size: 80% !important;
+  width: 103% !important;
+}
+.signature{
+  font-size: 70% !important;
+}
+.psmal{
+  font-size: 50% !important;
+}
+.page4{
+  display: flex;
+  flex-direction: column;
+  align-items: center !important;
+  
+}
+.page4 h1{
+  margin-bottom: -8px;
+  font-size: 350% !important;
+}
+.empty{
+  margin-top: 0.1%;
+  width: 60% ;
+}
+.page4 p{
+  width: 70% !important;
+}
 
+ .card{
+  width: 100% !important;
+  
+ }
+ .page5{
+  margin-top: 3rem !important;
+  
+}
+.page5 h1{
+  font-size: 180% !important;
+
+
+}
+.page6 h1{
+  width: 107%;
+}
+
+.page6p{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem !important;
+  align-items: center;
+  
+}
+.hurryimg{
+  width: 100%;
+}
+.page7{
+  margin-top: 50px;
+}
 
 
 
