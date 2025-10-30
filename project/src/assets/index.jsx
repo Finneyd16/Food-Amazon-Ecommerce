@@ -21,8 +21,11 @@ import P20 from './P20.png';
 import P21 from './P21.png';
 import P22 from './P22.png';
 import P23 from './P23.png';
+import P24 from './P24.png';
+import P25 from './P25.png';
+import P26 from './P26.png';
 
 
 
 
-export {P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12,P13,P14,P15,P16,P17,P18,P19,P20,P21,P22,P23};
+export {P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12,P13,P14,P15,P16,P17,P18,P19,P20,P21,P22,P23,P24,P25,P26};

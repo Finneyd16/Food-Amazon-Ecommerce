@@ -10,6 +10,7 @@
 }
 body{
   overflow-x: hidden;
+  position: absolute;
   
 }
 
@@ -164,10 +165,13 @@ display: flex;
   display: flex;
   justify-content: space-between;
   align-items: end;
- 
   gap: 350px;
   
  }
+
+ 
+
+
 
 
 
@@ -335,7 +339,26 @@ display: flex;
 .page7{
   margin-top: 50px;
 }
-
-
+.page8{
+  height: 400px !important;
+  width: 100vw !important;
+}
+.page8 p{
+  width: 70% !important;
+}
+form{
+  width: 90vw;
+  margin-top: 2rem;
+}
+.holder{
+  width: 90vw !important;
+}
+.p26{
+  left: 200px !important;
+  top: 280px !important;
+}
+.p25{
+  left: -1px !important;
+}
 
 }

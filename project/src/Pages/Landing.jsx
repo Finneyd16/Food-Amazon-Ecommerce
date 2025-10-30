@@ -10,7 +10,11 @@ import P17 from "../assets/P17.png";
 import P22 from "../assets/P22.png";
 import P23 from "../assets/P23.png";
 import P13 from "../assets/P13.png";
+import P24 from "../assets/P24.png";
+import P25 from "../assets/P25.png";
+import P26 from "../assets/P26.png";
 import { FaStar } from "react-icons/fa";
+import { FaPaperPlane } from "react-icons/fa";
 
 import ProductGrid from "../Components/Products";
 import OrdersGrid from "../Components/Bulkorder";
@@ -179,10 +183,7 @@ const Landing = () => {
         </div>
       </div>
 
-      <div
-        style={{ backgroundColor: "#EFFFE5",  }}
-        className="page4 pb-5 "
-      >
+      <div style={{ backgroundColor: "#EFFFE5" }} className="page4 pb-5 ">
         <div className="">
           <div className="d-flex flex-column align-items-center justify-content-center ">
             <h1
@@ -250,8 +251,8 @@ const Landing = () => {
       <div className="container page6  py-5">
         <div className="page6p ">
           <h1
-            style={{ fontWeight: "700" }}
-            className="col-sm-12 col-md-6 col-lg-5"
+            style={{ fontWeight: "1000", fontFamily: "MD Nichrome Test",fontSize:"260%", }}
+            className=" col-sm-12 col-md-6 col-lg-5"
           >
             Hurry Do not Miss Out On This Offers
           </h1>
@@ -275,7 +276,7 @@ const Landing = () => {
             <img src={P23} className="card-img-top " alt="..." />
             <div>
               <p className="my-3 text-muted d-flex align-items-center justify-content-between small">
-                Coconut Flakes{" "}
+                Coconut Flakes
                 <img style={{ width: "5%" }} className=" p9" src={P13} alt="" />
               </p>
               <h6>Coconut Crunchies</h6>
@@ -313,6 +314,80 @@ const Landing = () => {
         <div className="container">
           <div className="row">
             <HurryGrid />
+          </div>
+        </div>
+      </div>
+      <div
+        style={{
+          backgroundColor: "#EFFFE5",
+          paddingTop: "8rem",
+          paddingBottom: "6rem",
+        }}
+      >
+        <div className="container col-sm-12 col-md-10 col-lg-10">
+          <img
+            className="p25"
+            style={{ position: "relative", top: "55px", left: "90px" }}
+            src={P25}
+            alt=""
+          />
+          <img
+            className="p26"
+            style={{ position: "relative", top: "250px", left: "1000px" }}
+            src={P26}
+            alt=""
+          />
+          <div
+            className="page8 row d-flex flex-column align-items-center  "
+            style={{
+              backgroundImage: `url(${P24})`,
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              height: "340px",
+              borderRadius: "9px",
+              textAlign: "center",
+            }}
+          >
+            <h2
+              style={{ fontWeight: "bolder", color: "white" }}
+              className="pt-5 mt-4 "
+            >
+              Subscribe Our Newsletter
+            </h2>
+            <p className="mt-3" style={{ width: "40%", color: "white" }}>
+              Receive latest updates on our products and many other things every
+              week.
+            </p>
+            <form style={{ position: "relative" }} action="">
+              <input
+                style={{
+                  padding: "10px 20px",
+                  borderRadius: "9px",
+                  border: "none",
+
+                  width: "500px",
+                  outline: "none",
+                }}
+                className="holder"
+                placeholder="Enter Your Email Address"
+                type="text"
+              ></input>
+              <button
+                style={{
+                  position: "absolute",
+                  right: "10px",
+                  top: "8px",
+                  backgroundColor: "#00A859",
+                  padding: "5px",
+                  borderRadius: "5px",
+                  color: "white",
+                  border: "none",
+                }}
+                type="submit"
+              >
+                <FaPaperPlane />
+              </button>
+            </form>
           </div>
         </div>
       </div>
