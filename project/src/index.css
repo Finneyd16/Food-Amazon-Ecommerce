@@ -360,5 +360,57 @@ form{
 .p25{
   left: -1px !important;
 }
+.footer5{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 12px;
+  margin-left: 1rem;
+  padding-bottom: 2rem;
+}
+.footer6{
+  display: flex;
+  flex-direction: column;
+  align-items: start !important;
+  text-align: left !important;
+  justify-content: none !important;
+}
+.senior{
+  display: flex;
+  flex-direction: column;
+   align-items: start;
+    
+   
+}
+.sp{
+   margin-bottom: 15px !important;
+    margin-left: -164px;
+}
+.sp2{
+  display: flex;
+  flex-direction: column;
+   align-items: start;
+   
+  
+}
+.sp3{
+  text-align: left;
+   align-items: start;
+
+}
+
+.sp1{
+  margin-left: -254px;
+  margin-bottom: 20px;
+}
+.p32{
+  margin-bottom: 20px;
+}
+.p33{
+  margin-bottom: 20px;
+}
+.p34{
+  margin-bottom: 20px;
+}
 
 }

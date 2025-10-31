@@ -5,6 +5,10 @@ import P28 from "../assets/P28.png";
 import P29 from "../assets/P29.png";
 import P30 from "../assets/P30.png";
 import P31 from "../assets/P31.png";
+import P32 from "../assets/P32.png";
+import P33 from "../assets/P33.png";
+import P34 from "../assets/P34.png";
+import P1 from "../assets/P1.png";
 
 const Footer = () => {
   return (
@@ -53,8 +57,8 @@ const Footer = () => {
         <section className=" ">
           <div className="container text-muted text-center text-md-start mt-5 ">
             <div className="row mt-3 ">
-              <div className=" footer1 col-md-3 col-lg-4 col-xl-3 mx-auto mb-4 d-flex flex-column align-items-start">
-                <h6 className="text-uppercase fw-bold mb-4 text-white">
+              <div className=" footer1 col-md-3 col-lg-4 col-xl-3 mx-auto mb-4 d-flex flex-column align-items-start small">
+                <h6 className="text-uppercase fw-bold mb-4 text-white small">
                   <i className=" me-3 "></i>Customer Service
                 </h6>
                 <p className="">
@@ -79,8 +83,8 @@ const Footer = () => {
                 </p>
               </div>
 
-              <div className="footer2 col-md-2 col-lg-2 col-xl-2 mx-auto mb-4 d-flex flex-column align-items-start">
-                <h6 className="text-uppercase fw-bold mb-4 text-white">
+              <div className="footer2 col-md-2 col-lg-2 col-xl-2 mx-auto mb-4 d-flex flex-column align-items-start small">
+                <h6 className="text-uppercase fw-bold mb-4 text-white small">
                   About Us
                 </h6>
                 <p className="">
@@ -106,7 +110,7 @@ const Footer = () => {
               </div>
 
               <div className=" footer3 col-md-3 col-lg-2 col-xl-2 mx-auto mb-4 d-flex flex-column align-items-start">
-                <h6 className="text-uppercase fw-bold mb-4 text-white">
+                <h6 className="text-uppercase fw-bold mb-4 text-white small">
                   Need Help?
                 </h6>
                 <p>
@@ -122,7 +126,7 @@ const Footer = () => {
               </div>
 
               <div className="footer4 col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4 d-flex flex-column align-items-start">
-                <h6 className="text-uppercase fw-bold mb-4 text-white">
+                <h6 className="text-uppercase fw-bold mb-4 text-white small ">
                   Privacy
                 </h6>
                 <p>
@@ -133,11 +137,11 @@ const Footer = () => {
                   Privacy Policy
                 </p>
               </div>
-              <div>
-                <h6 className="text-uppercase fw-bold mb-4 text-white d-flex flex-column align-items-start">
+              <div className="footer5 ">
+                <h6 className="text-uppercase fw-bold mb-4 text-white d-flex flex-column align-items-start small">
                   Follow us
                 </h6>
-                <a href="" className=" footer5 me-4 text-reset">
+                <a href="" className=" me-4 text-reset small">
                   <i
                     style={{
                       backgroundColor: "#F58634",
@@ -150,26 +154,26 @@ const Footer = () => {
                     className="fab fa-facebook-f"
                   ></i>
                 </a>
-                <a href="" className="me-4 text-reset">
+                <a href="" className="me-4 text-reset small">
                   <i
                     style={{
                       backgroundColor: "#F58634",
                       color: "white",
                       padding: "10px 20px",
-                      paddingRight: "30px",
+                      paddingRight: "25px",
                       paddingLeft: "15px",
                       marginRight: "15px",
                     }}
                     className="fab fa-twitter"
                   ></i>
                 </a>
-                <a href="" className="me-4 text-reset">
+                <a href="" className="me-4 text-reset small">
                   <i
                     style={{
                       backgroundColor: "#F58634",
                       color: "white",
                       padding: "10px 20px",
-                      paddingRight: "30px",
+                      paddingRight: "25px",
                       paddingLeft: "15px",
                       marginRight: "15px",
                     }}
@@ -180,14 +184,43 @@ const Footer = () => {
             </div>
           </div>
         </section>
-
-        <div
-          className="text-white text-center p-4"
-          style={{ backgroundColor: "rgba(0, 0, 0, 0.05" }}
-        >
-          © 2021 Copyright:
-          <a className="text-reset fw-bold">MDBootstrap.com</a>
-        </div>
+        <section className="sec" style={{ backgroundColor: "#D9D9D9" }}>
+          <div className="footer6 container text-white text-center p-4 d-flex align-items-center justify-content-between">
+            <img className="sp1" src={P1} alt="" />
+            <div className="senior">
+              <span className="sp">
+                <img
+                  className="p32"
+                  style={{
+                    height: "15px",
+                    marginRight: "12px",
+                  }}
+                  src={P32}
+                  alt=""
+                />
+                <span className="sp2">
+                  <img
+                    className="p33"
+                    style={{ height: "15px", marginRight: "12px" }}
+                    src={P33}
+                    alt=""
+                  />
+                  <span>
+                    <img
+                      className="p34"
+                      style={{ height: "15px" }}
+                      src={P34}
+                      alt=""
+                    />
+                  </span>
+                </span>
+              </span>
+            </div>
+            <a style={{ color: "#0F0B0B" }} className="sp3 small fw-bold">
+              Copyright © 2024 FoodieAmazon. All Rights Reserved
+            </a>
+          </div>
+        </section>
       </footer>
     </>
   );
