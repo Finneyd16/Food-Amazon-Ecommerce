@@ -57,18 +57,22 @@ const Header = () => {
               </a>
             </li>
             <li className="nav-item">
-              <button className="p8 nav-link btn text-dark">
-                <img style={{ marginRight: "2rem" }} src={P8} alt="" />
+              <button className="p8 nav-link btn text-dark border-left border-right">
+                <img  src={P8} alt="" />
               </button>
             </li>
             <li>
               <button className="p9 text-dark btn me-3">
-                <img src={P9} alt="" />
+                <img style={{marginLeft:'20px'}} src={P9} alt="" />
               </button>
             </li>
             <li>
-              <button className=" p7 text-dark btn me-3">
-                <img style={{ marginRight: "2rem",marginTop:'-9px' }} src={P7} alt="" />
+              <button className=" p7 text-dark btn me-3 ">
+                <img
+                  style={{ marginRight: "2rem", marginTop: "-9px" }}
+                  src={P7}
+                  alt=""
+                />
               </button>
             </li>
             <li>
