@@ -3,6 +3,8 @@ import P19 from "../assets/P19.png";
 import P20 from "../assets/P20.png";
 import P21 from "../assets/P21.png";
 import { FaChevronRight } from "react-icons/fa";
+import { Link } from "react-router-dom";
+
 
 const products = [
   {
@@ -42,11 +44,15 @@ const products = [
 
 const OrdersGrid = () => {
 
-    return (
+
+  return (
       <div className="my-5 container">
         <div className="row">
           {products.map((product) => (
-            <div key={product.id} className=" py-3 col-sm-12 col-md-6 col-lg-3 ">
+            <div
+              key={product.id}
+              className=" py-3 col-sm-12 col-md-6 col-lg-3 "
+            >
               <div
                 className={`card d-flex flex-column ${
                   product.category === "Others" ? "others-card" : "main-card"
@@ -71,10 +77,15 @@ const OrdersGrid = () => {
                   </p>
                   <p>{product.category}</p>
                   <p style={{ marginTop: "-10px" }}>{product.content}</p>
-                  <button>
-                    {product.button}
-                    <FaChevronRight  size={`${product.category === "Others" ? 14 : 10}`} style={{ marginLeft: "5px" }} />
-                  </button>
+                  <Link to={`/ORDERNOW/${product.id}`}>
+                    <button>
+                      {product.button}
+                      <FaChevronRight
+                        size={`${product.category === "Others" ? 14 : 10}`}
+                        style={{ marginLeft: "5px" }}
+                      />
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>

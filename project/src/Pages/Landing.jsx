@@ -204,8 +204,8 @@ const Landing = () => {
             </p>
           </div>
         </div>
-        <div className=" container">
-          <OrdersGrid />
+        <div className=" container-fluid">
+          <OrdersGrid /> 
         </div>
       </div>
       <div style={{ marginTop: "10rem" }} className="page5 container">
@@ -251,7 +251,11 @@ const Landing = () => {
       <div className="container page6  py-5">
         <div className="page6p ">
           <h1
-            style={{ fontWeight: "1000", fontFamily: "MD Nichrome Test",fontSize:"260%", }}
+            style={{
+              fontWeight: "1000",
+              fontFamily: "MD Nichrome Test",
+              fontSize: "260%",
+            }}
             className=" col-sm-12 col-md-6 col-lg-5"
           >
             Hurry Do not Miss Out On This Offers
@@ -364,7 +368,6 @@ const Landing = () => {
                   padding: "10px 20px",
                   borderRadius: "9px",
                   border: "none",
-
                   width: "500px",
                   outline: "none",
                 }}
