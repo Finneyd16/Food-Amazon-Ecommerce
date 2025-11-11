@@ -17,10 +17,15 @@ const Ordernow = () => {
       <>
         <div className="container">
           <div style={{ marginTop: "100px" }} className="row">
-            <div className="col-sm-12 col-md-6 col-lg-8">
-              <img style={{height:'588px'}} className="p35" src={P35} alt="" />
+            <div className="col-sm-12 col-md-6 col-lg-7">
+              <img
+                style={{ height: "588px" }}
+                className="p35"
+                src={P35}
+                alt=""
+              />
             </div>
-            <div className="mb-3 col-sm-12 col-md-6 col-lg-4">
+            <div className="mb-3 col-sm-12 col-md-6 col-lg-5">
               <p className="text-muted">Coconut Flakes</p>
               <h3>Coconut Crunchies</h3>
               <p>
@@ -98,7 +103,10 @@ const Ordernow = () => {
                   </button>
                 </div>
               </div>
-              <p style={{ lineHeight: "180%" }} className="py-4">
+              <p
+                style={{ lineHeight: "180%", width: "89%" }}
+                className="py-4 text-muted"
+              >
                 Our Date-Coconut Delight combines the rich sweetness of organic
                 date syrup with the tropical flavor of coconut flakes, creating
                 a snack that’s both indulgent and healthy.
@@ -131,6 +139,40 @@ const Ordernow = () => {
                 >
                   Check Out
                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="container mt-5">
+          <div className="row">
+            <div className="col-sm-12 col-md-6 col-lg-6">
+              <h5 style={{ fontWeight: "800" }}>About This Product</h5>
+              <p
+                className="text-muted"
+                style={{ width: "89%", lineHeight: "180%", fontSize: "95%" }}
+              >
+                Indulge in the natural crunch and flavor of our Crunchy Nut Mix,
+                a blend of premium nuts roasted to perfection. This mix includes
+                almonds, cashews, and walnuts, providing a delicious and
+                nutritious snack that is rich in protein and healthy fats.
+              </p>
+              <ul
+                style={{ lineHeight: "180%", fontSize: "95%" }}
+                className=" text-muted mt-4 ml-4"
+              >
+                <li>Blend of organic almonds, cashews, and walnuts</li>
+                <li>Lightly roasted to enhance natural flavors</li>
+                <li>No added oils or preservatives</li>
+              </ul>
+              <div>
+                <p style={{ width: "90%", lineHeight: "180%" }}>
+                  <strong>Benefits:</strong>
+                  <span className="text-muted ml-2">
+                    Excellent source of protein and healthy fats. Supports heart
+                    health and brain function. Satisfies hunger and boosts
+                    energy
+                  </span>
+                </p>
               </div>
             </div>
           </div>
