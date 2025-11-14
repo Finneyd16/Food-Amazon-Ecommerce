@@ -173,6 +173,21 @@ display: flex;
   
  }
 
+
+ /* product page */
+ .bulkholder1::placeholder{
+  font-size: 13px ;
+  padding-left: 10px ;
+ }
+ 
+ .bulkholder2::placeholder{
+  font-size: 13px ;
+  padding-left: 10px ;
+ 
+ }
+
+ 
+
  
 
 
