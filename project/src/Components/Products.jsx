@@ -87,7 +87,14 @@ const ProductGrid = () => {
             </div>
           ))}
         </div>
-        <img className=" p14 col-sm-12 col-md-12 col-lg-12" src={P14} alt="" />
+        <button style={{border:'none', backgroundColor:'transparent'}}>
+         
+          <img
+            className=" p14 col-sm-12 col-md-12 col-lg-12"
+            src={P14}
+            alt=""
+          />
+        </button>
       </div>
     </>
   );

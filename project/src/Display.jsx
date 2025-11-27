@@ -5,6 +5,7 @@ import Landing from './Pages/Landing';
 import Footer from './Components/Footer';
 import ORDERNOW from './Pages/Ordernow.jsx';
 import OrdersGrid from './Components/Bulkorder.jsx';
+import ScrollToTop from "./Components/scrollToTop.jsx";
 
 
 
@@ -12,18 +13,18 @@ import OrdersGrid from './Components/Bulkorder.jsx';
 const Display = () => {
   return (
     <>
-    <BrowserRouter>
-    <Header/>
-    <Routes>
-        <Route path='/' element={<Landing/>}></Route>
-        <Route path='/OrdersGrid' element={<OrdersGrid/>}></Route>
-        <Route path='/ORDERNOW/:id' element={<ORDERNOW/>}></Route>
-    </Routes>
-    <Footer/>
-    </BrowserRouter>
-      
+      <BrowserRouter>
+        <Header />
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<Landing />}></Route>
+          <Route path="/OrdersGrid" element={<OrdersGrid />}></Route>
+          <Route path="/ORDERNOW/:id" element={<ORDERNOW />}></Route>
+        </Routes>
+        <Footer />
+      </BrowserRouter>
     </>
-  )
+  );
 }
 
 export default Display

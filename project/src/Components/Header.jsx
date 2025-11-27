@@ -83,6 +83,7 @@ const Header = () => {
                   border: "none",
                   borderRadius: "9px",
                   backgroundColor: "#00A859",
+                  color: "white",
                 }}
                 className="btn1"
               >

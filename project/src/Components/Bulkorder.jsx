@@ -68,9 +68,7 @@ const OrdersGrid = () => {
                 />
                 <div
                   className={`card-body d-flex flex-column align-items-center ${
-                    product.category === "Others" ? "others-card-body" : ""
-                  }`}
-                >
+                    product.category === "Others" ? "others-card-body" : ""}`} >
                   <h6 style={{ fontWeight: "900" }}>{product.title}</h6>
                   <p style={{ width: "75%", textAlign: "center" }}>
                     {product.description}
