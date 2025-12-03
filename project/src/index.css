@@ -446,3 +446,63 @@ form{
 
 }
 
+@media (max-width: 992px) {
+  .register {
+    flex-direction: column !important;
+    gap: 2rem !important;
+    
+  }
+
+  .register-image {
+    width: 100% !important;
+    max-height: 500px;
+    object-fit: cover;
+  }
+
+  .register-form-wrapper {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .register-input {
+    width: 100% !important;
+    max-width: 400px;
+  }
+
+  .password-input-wrapper {
+    max-width: 400px;
+  }
+
+
+
+
+  /* login */
+    .login-page-container {
+    flex-direction: column;
+    gap: 2rem !important;
+   
+  }
+
+  .login-left-image {
+    width: 100% !important;
+     max-height: 500px;
+    object-fit: cover;
+  }
+
+  .logo-image{
+    position: absolute;
+    top: 0px;
+    left: 10rem!important;
+  }
+
+  .login-right-wrapper {
+    width: 100% !important;
+    padding: 2rem !important;
+  }
+
+  .login-email-input {
+    width: 100% !important;
+  }
+}

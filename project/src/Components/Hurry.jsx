@@ -4,7 +4,7 @@ import P10 from "../assets/P10.png";
 import P11 from "../assets/P11.png";
 import P12 from "../assets/P12.png";
 import P13 from "../assets/P13.png";
-import P14 from "../assets/P14.png";
+
 
 
 const Products = [

@@ -1,30 +1,48 @@
-import React from 'react'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Header from "./Components/Header"
-import Landing from './Pages/Landing';
-import Footer from './Components/Footer';
-import ORDERNOW from './Pages/Ordernow.jsx';
-import OrdersGrid from './Components/Bulkorder.jsx';
+import React from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import Header from "./Components/Header";
+import Footer from "./Components/Footer";
 import ScrollToTop from "./Components/scrollToTop.jsx";
+import Landing from "./Pages/Landing";
+import Login from "./Pages/Login.jsx";
+import OrdersGrid from "./Components/Bulkorder.jsx";
+import ORDERNOW from "./Pages/Ordernow.jsx";
+import Register from "./Pages/Register.jsx";
 
 
+const Layout = () => {
+  const location = useLocation();
 
+ 
+  const hideOn = ["/Login", "/login", "/Register"];
+
+  const hideLayout = hideOn.includes(location.pathname);
+
+  return (
+    <>
+      {!hideLayout && <Header />}
+
+      <ScrollToTop />
+
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/OrdersGrid" element={<OrdersGrid />} />
+        <Route path="/ORDERNOW/:id" element={<ORDERNOW />} />
+        <Route path="/Register" element={<Register />} />
+      </Routes>
+
+      {!hideLayout && <Footer />}
+    </>
+  );
+};
 
 const Display = () => {
   return (
-    <>
-      <BrowserRouter>
-        <Header />
-        <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Landing />}></Route>
-          <Route path="/OrdersGrid" element={<OrdersGrid />}></Route>
-          <Route path="/ORDERNOW/:id" element={<ORDERNOW />}></Route>
-        </Routes>
-        <Footer />
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <Layout />
+    </BrowserRouter>
   );
-}
+};
 
-export default Display
+export default Display;

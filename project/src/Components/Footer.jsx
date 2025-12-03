@@ -23,7 +23,6 @@ const Footer = () => {
             <img src={P27} alt="" />
             <p>Based on 13,586 reviews</p>
             <div>
-              {" "}
               <img
                 style={{
                   marginTop: "-60px",

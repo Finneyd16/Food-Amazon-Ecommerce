@@ -12,6 +12,7 @@ import P41 from "../assets/P41.png";
 import P42 from "../assets/P42.png";
 import ProductGrid from "../Components/Products";
 
+
 const Ordernow = () => {
   const { id } = useParams();
 
@@ -60,6 +61,7 @@ const Ordernow = () => {
                 className="text-muted"
                 style={{ display: "flex", gap: "5px", alignItems: "center" }}
               >
+                
                 <FaStar style={{ color: "#F58634" }} />
                 <span>5.0</span>
                 <span>(37)</span>

@@ -16,6 +16,7 @@ import P26 from "../assets/P26.png";
 import { FaStar } from "react-icons/fa";
 import { FaPaperPlane } from "react-icons/fa";
 
+
 import ProductGrid from "../Components/Products";
 import OrdersGrid from "../Components/Bulkorder";
 import HurryGrid from "../Components/Hurry";
@@ -280,7 +281,7 @@ const Landing = () => {
             <img src={P23} className="card-img-top " alt="..." />
             <div>
               <p className="my-3 text-muted d-flex align-items-center justify-content-between small">
-                Coconut Flakes
+                Coconut Flakes 
                 <img style={{ width: "5%" }} className=" p9" src={P13} alt="" />
               </p>
               <h6>Coconut Crunchies</h6>
