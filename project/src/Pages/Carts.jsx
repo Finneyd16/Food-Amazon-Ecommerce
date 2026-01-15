@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Trash2, Plus, Minus } from "lucide-react";
-// import { useAuth } from "./AuthContext";
+// import { useAuth } from "../context/AuthContext.jsx";
 
-const CUSTOMER_ID = "69274186863f52b5a1790df0";
+const CUSTOMER_ID = "6968f5561f365463ca96b839";
 
 function Carts() {
-  // const { user } = useAuth(); // Get logged-in user
-  // const CUSTOMER_ID = user?._id;
+//  const { user, loading: authLoading } = useAuth();
+// const CUSTOMER_ID = user?._id;
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -42,8 +42,11 @@ function Carts() {
   };
 
   useEffect(() => {
-    fetchCart();
-  }, []);
+  if (!CUSTOMER_ID) return;
+  fetchCart();
+}, [CUSTOMER_ID]);
+
+
 
   const updateQuantity = async (productId, newQty) => {
     if (newQty < 1) return;
