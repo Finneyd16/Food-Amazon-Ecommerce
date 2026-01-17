@@ -3,7 +3,7 @@ import { FaStar } from "react-icons/fa";
 import P13 from "../assets/P13.png";
 import P14 from "../assets/P14.png";
 
-const ProductGrid = () => {
+const Nproduct = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -65,7 +65,7 @@ const ProductGrid = () => {
     <>
       <div className="my-5">
         <div className="row">
-          {products.slice(3, 6).map((product) => (
+          {products.slice(0, 3).map((product) => (
             <div key={product._id} className="col-sm-12 col-md-6 col-lg-4">
               <div className="d-flex flex-column">
                 <img
@@ -134,4 +134,4 @@ const ProductGrid = () => {
   );
 };
 
-export default ProductGrid;
+export default Nproduct;

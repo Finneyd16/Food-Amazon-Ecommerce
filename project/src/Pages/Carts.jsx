@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Trash2, Plus, Minus } from "lucide-react";
-// import { useAuth } from "../context/AuthContext.jsx";
-
-const CUSTOMER_ID = "6968f5561f365463ca96b839";
+import { useAuth } from "../context/AuthContext.jsx";
 
 function Carts() {
-//  const { user, loading: authLoading } = useAuth();
-// const CUSTOMER_ID = user?._id;
+  const { user, loading: authLoading } = useAuth();
+  const CUSTOMER_ID = user?._id;
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,23 +14,31 @@ function Carts() {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(
-        `http://localhost:3001/api/fooddocuments/carts/get-cart/${CUSTOMER_ID}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+      if (user && CUSTOMER_ID) {
+        // Logged in - fetch from database
+        const response = await fetch(
+          `http://localhost:3001/api/fooddocuments/carts/get-cart/${CUSTOMER_ID}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch cart");
         }
-      );
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch cart");
+        const data = await response.json();
+        console.log("Cart data from database:", data);
+        setCart(data);
+      } else {
+        // Guest - get from localStorage
+        const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+        console.log("Cart data from localStorage:", localCart);
+        setCart({ cartItems: localCart });
       }
-
-      const data = await response.json();
-      console.log("Cart data:", data);
-      setCart(data);
     } catch (err) {
       console.error("Fetch cart error:", err);
       setError(err.message || "Failed to load cart");
@@ -42,39 +48,47 @@ function Carts() {
   };
 
   useEffect(() => {
-  if (!CUSTOMER_ID) return;
-  fetchCart();
-}, [CUSTOMER_ID]);
-
-
+    fetchCart();
+  }, [user, CUSTOMER_ID]);
 
   const updateQuantity = async (productId, newQty) => {
     if (newQty < 1) return;
 
     try {
-      setCart((prev) => ({
-        ...prev,
-        cartItems: prev.cartItems.map((item) =>
+      if (user && CUSTOMER_ID) {
+        // Logged in - update in database
+        setCart((prev) => ({
+          ...prev,
+          cartItems: prev.cartItems.map((item) =>
+            item.product._id === productId ? { ...item, quantity: newQty } : item
+          ),
+        }));
+
+        const response = await fetch(
+          `http://localhost:3001/api/fooddocuments/carts/update-cart-item/${CUSTOMER_ID}/${productId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ quantity: newQty }),
+          }
+        );
+
+        if (!response.ok) throw new Error("Failed to update quantity");
+
+        const data = await response.json();
+        console.log("Update response:", data);
+        setCart(data.cart || data);
+      } else {
+        // Guest - update in localStorage
+        const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+        const updatedCart = localCart.map((item) =>
           item.product._id === productId ? { ...item, quantity: newQty } : item
-        ),
-      }));
-
-      const response = await fetch(
-        `http://localhost:3001/api/fooddocuments/carts/update-cart-item/${CUSTOMER_ID}/${productId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ quantity: newQty }),
-        }
-      );
-
-      if (!response.ok) throw new Error("Failed to update quantity");
-
-      const data = await response.json();
-      console.log("Update response:", data);
-      setCart(data.cart || data);
+        );
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+        setCart({ cartItems: updatedCart });
+      }
     } catch (err) {
       console.error("Update quantity error:", err);
       fetchCart();
@@ -83,28 +97,39 @@ function Carts() {
 
   const removeItem = async (productId) => {
     try {
-      setCart((prev) => ({
-        ...prev,
-        cartItems: prev.cartItems.filter(
+      if (user && CUSTOMER_ID) {
+        // Logged in - remove from database
+        setCart((prev) => ({
+          ...prev,
+          cartItems: prev.cartItems.filter(
+            (item) => item.product._id !== productId
+          ),
+        }));
+
+        const response = await fetch(
+          `http://localhost:3001/api/fooddocuments/carts/remove-from-cart/${CUSTOMER_ID}/${productId}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) throw new Error("Failed to remove item");
+
+        const data = await response.json();
+        console.log("Remove response:", data);
+        setCart(data.cart || data);
+      } else {
+        // Guest - remove from localStorage
+        const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+        const updatedCart = localCart.filter(
           (item) => item.product._id !== productId
-        ),
-      }));
-
-      const response = await fetch(
-        `http://localhost:3001/api/fooddocuments/carts/remove-from-cart/${CUSTOMER_ID}/${productId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) throw new Error("Failed to remove item");
-
-      const data = await response.json();
-      console.log("Remove response:", data);
-      setCart(data.cart || data);
+        );
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+        setCart({ cartItems: updatedCart });
+      }
     } catch (err) {
       console.error("Remove item error:", err);
       fetchCart();
@@ -124,6 +149,14 @@ function Carts() {
   const shipping = 0;
   const tax = subtotal * 0.01;
   const total = subtotal - savings + shipping + tax;
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">Loading user...</div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -168,14 +201,12 @@ function Carts() {
                         display: "flex",
                         justifyContent: "space-around",
                         alignItems: "center",
-                        marginBottom: "10px", 
+                        marginBottom: "10px",
                       }}
                       className=""
                     >
                       <p className="small">Item {index + 1}</p>
-                      <button 
-                        // onClick{() => addItemToWishlist(item.product._id)}
-                        className="small">Save for later</button>
+                      <button className="small">Save for later</button>
 
                       <button
                         onClick={() => removeItem(item.product._id)}
@@ -184,7 +215,15 @@ function Carts() {
                         Remove
                       </button>
 
-                      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:'6px'}} className="">
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          gap: "6px",
+                        }}
+                        className=""
+                      >
                         <span className="">Qty:</span>
                         <button
                           onClick={() =>

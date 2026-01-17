@@ -15,6 +15,7 @@ import P25 from "../assets/P25.png";
 import P26 from "../assets/P26.png";
 import { FaStar } from "react-icons/fa";
 import { FaPaperPlane } from "react-icons/fa";
+import Nproduct from "../Components/Nproducts";
 
 
 import ProductGrid from "../Components/Products";
@@ -247,7 +248,7 @@ const Landing = () => {
             </div>
           </div>
         </div>
-        <ProductGrid />
+        <Nproduct />
       </div>
       <div className="container page6  py-5">
         <div className="page6p ">
