@@ -9,6 +9,7 @@ import OrdersGrid from "./Components/Bulkorder.jsx";
 import ORDERNOW from "./Pages/Ordernow.jsx";
 import Register from "./Pages/Register.jsx";
 import Carts from "./Pages/Carts.jsx";
+import Checkout from "./Pages/Checkout.jsx";
 
 const Layout = () => {
   const location = useLocation();
@@ -31,6 +32,7 @@ const Layout = () => {
         <Route path="/ORDERNOW/:id" element={<ORDERNOW />} />
         <Route path="/Register" element={<Register />} />
         <Route path="/Carts" element={<Carts />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
 
       {!hideLayout && <Footer />}

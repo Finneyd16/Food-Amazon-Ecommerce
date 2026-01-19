@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
+import { useNavigate } from "react-router-dom";
 
 function Carts() {
   const { user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const CUSTOMER_ID = user?._id;
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -23,7 +25,7 @@ function Carts() {
             headers: {
               "Content-Type": "application/json",
             },
-          }
+          },
         );
 
         if (!response.ok) {
@@ -60,7 +62,9 @@ function Carts() {
         setCart((prev) => ({
           ...prev,
           cartItems: prev.cartItems.map((item) =>
-            item.product._id === productId ? { ...item, quantity: newQty } : item
+            item.product._id === productId
+              ? { ...item, quantity: newQty }
+              : item,
           ),
         }));
 
@@ -72,7 +76,7 @@ function Carts() {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({ quantity: newQty }),
-          }
+          },
         );
 
         if (!response.ok) throw new Error("Failed to update quantity");
@@ -84,7 +88,7 @@ function Carts() {
         // Guest - update in localStorage
         const localCart = JSON.parse(localStorage.getItem("cart")) || [];
         const updatedCart = localCart.map((item) =>
-          item.product._id === productId ? { ...item, quantity: newQty } : item
+          item.product._id === productId ? { ...item, quantity: newQty } : item,
         );
         localStorage.setItem("cart", JSON.stringify(updatedCart));
         setCart({ cartItems: updatedCart });
@@ -102,7 +106,7 @@ function Carts() {
         setCart((prev) => ({
           ...prev,
           cartItems: prev.cartItems.filter(
-            (item) => item.product._id !== productId
+            (item) => item.product._id !== productId,
           ),
         }));
 
@@ -113,7 +117,7 @@ function Carts() {
             headers: {
               "Content-Type": "application/json",
             },
-          }
+          },
         );
 
         if (!response.ok) throw new Error("Failed to remove item");
@@ -125,7 +129,7 @@ function Carts() {
         // Guest - remove from localStorage
         const localCart = JSON.parse(localStorage.getItem("cart")) || [];
         const updatedCart = localCart.filter(
-          (item) => item.product._id !== productId
+          (item) => item.product._id !== productId,
         );
         localStorage.setItem("cart", JSON.stringify(updatedCart));
         setCart({ cartItems: updatedCart });
@@ -136,11 +140,22 @@ function Carts() {
     }
   };
 
+  const handleCheckout = () => {
+    if (user) {
+      // User is logged in - go to checkout
+      navigate("/checkout");
+    } else {
+      // User is NOT logged in - go to login
+      localStorage.setItem("intendedDestination", "/checkout");
+      navigate("/Login");
+    }
+  };
+
   const calcSubtotal = () => {
     if (!cart?.cartItems) return 0;
     return cart.cartItems.reduce(
       (sum, item) => sum + item.product.price * item.quantity,
-      0
+      0,
     );
   };
 
@@ -318,6 +333,7 @@ function Carts() {
           </div>
 
           <button
+            onClick={handleCheckout}
             className="w-full bg-orange-500 text-white py-3 rounded-lg mt-6 font-semibold hover:bg-orange-600 disabled:bg-gray-300"
             disabled={cartItems.length === 0}
           >

@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import P43 from "../assets/P43.png";
 import P1 from "../assets/P1.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { login, user } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -12,7 +16,22 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [info, setInfo] = useState("");
+
+  // Redirect if already logged in
+  // useEffect(() => {
+  //   if (user) {
+  //     const intendedDestination = localStorage.getItem("intendedDestination");
+      
+  //     if (intendedDestination) {
+  //       // User came from checkout, go there
+  //       navigate(intendedDestination);
+  //       localStorage.removeItem("intendedDestination");
+  //     } else {
+  //       // User manually visited login while logged in, go back
+  //       navigate(-1);
+  //     }
+  //   }
+  // }, [user, navigate]);
 
   const handleChange = (e) => {
     setFormData({
@@ -27,36 +46,20 @@ const Login = () => {
     setError("");
 
     try {
-      const response = await fetch( "http://localhost:3001/api/fooddocuments/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
-
-      const data = await response.json();
-      setInfo(data.message);
-      console.log(info.message);
-      if (!response.ok) {
-        throw new Error(data || "Login failed");
-      }
-
-      // Store token in localStorage
-      localStorage.setItem("token", data.token);
+      await login(formData.email, formData.password);
 
       // Optional: Store email if remember me is checked
       if (rememberMe) {
         localStorage.setItem("rememberedEmail", formData.email);
       }
 
-      // Success! Redirect or update app state
-      console.log("Login successful!", data);
-      // window.location.href = "/dashboard"; // Redirect to dashboard
+      // Success! Navigate based on intended destination
       alert("Login successful!");
+      const intendedDestination = localStorage.getItem("intendedDestination") || "/";
+      navigate(intendedDestination);
+      localStorage.removeItem("intendedDestination");
     } catch (err) {
-      setError(err.message || "Something went wrong. Please try again.");
+      setError(err.message || "Invalid email or password");
     } finally {
       setLoading(false);
     }
@@ -107,6 +110,7 @@ const Login = () => {
           Don't have an account yet?
           <span className="signup-wrapper">
             <button
+              onClick={() => navigate("/Register")}
               className="signup-btn"
               style={{
                 color: "#F58634",
@@ -180,7 +184,7 @@ const Login = () => {
 
         {error && (
           <p style={{ color: "red", fontSize: "14px", marginTop: "10px" }}>
-            {info}
+            {error}
           </p>
         )}
 

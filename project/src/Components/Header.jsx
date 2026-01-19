@@ -4,8 +4,19 @@ import P7 from "../assets/P7.png";
 import P8 from "../assets/P8.png";
 import P9 from "../assets/P9.png";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+    alert("Logged out successfully!");
+  };
+  
   return (
     <nav className="container navbar navbar-expand-lg navbar-light ">
       <div className=" container-fluid">
@@ -59,12 +70,12 @@ const Header = () => {
             </li>
             <li className="nav-item">
               <button className="p8 nav-link btn text-dark border-left border-right">
-                <img  src={P8} alt="" />
+                <img src={P8} alt="" />
               </button>
             </li>
             <li>
               <button className="p9 text-dark btn me-3">
-                <img style={{marginLeft:'20px'}} src={P9} alt="" />
+                <img style={{ marginLeft: '20px' }} src={P9} alt="" />
               </button>
             </li>
             <li>
@@ -90,6 +101,43 @@ const Header = () => {
                 <a>Contact Us</a>
               </button>
             </li>
+            
+            {/* Show Logout if logged in, Login if not */}
+            {user ? (
+              <li>
+                <button 
+                  onClick={handleLogout}
+                  style={{
+                    padding: "8px",
+                    border: "none",
+                    borderRadius: "9px",
+                    backgroundColor: "#F58634",
+                    color: "white",
+                    height: "44px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Logout
+                </button>
+              </li>
+            ) : (
+              <li>
+                <button 
+                  onClick={() => navigate("/Login")}
+                  style={{
+                    padding: "5px 15px",
+                    border: "none",
+                    borderRadius: "9px",
+                    backgroundColor: "#00A859",
+                    color: "white",
+                    height: "44px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Login
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       </div>
