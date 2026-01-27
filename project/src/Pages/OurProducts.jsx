@@ -1,12 +1,161 @@
 
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import { FaStar } from "react-icons/fa";
+import { useAuth } from "../context/AuthContext.jsx";
+import P13 from "../assets/P13.png";
 
 const OurProducts = () => {
+   const { user } = useAuth();
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+  
+    useEffect(() => {
+      const fetchProducts = async () => {
+        try {
+          const response = await fetch(
+            "http://localhost:3001/api/fooddocuments/products/get-all-products",
+          );
+          const data = await response.json();
+          setProducts(data);
+          setLoading(false);
+        } catch (error) {
+          console.error("Error fetching products:", error);
+          setLoading(false);
+        }
+      };
+  
+      fetchProducts();
+    }, []);
+  
+    const addToCart = async (product) => {
+       try {
+      if (user) {
+        // User is logged in - add to database
+        const response = await fetch(
+          "http://localhost:3001/api/fooddocuments/carts/add-to-cart",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              customerId: user._id,
+              productId: product._id,
+              quantity: 1,
+            }),
+          }
+        );
+  
+        const data = await response.json();
+  
+        if (!response.ok) {
+          throw new Error("Failed to add to cart");
+        }
+  
+        alert("Product added to cart!");
+      } else {
+        // Guest user - add to localStorage
+        const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+        
+        const existingItemIndex = existingCart.findIndex(
+          item => item.product._id === product._id
+        );
+  
+        if (existingItemIndex > -1) {
+          existingCart[existingItemIndex].quantity += 1;
+        } else {
+          existingCart.push({
+            product: {
+              _id: product._id,
+              name: product.name,
+              price: product.price,
+              productImg: product.productImg,
+            },
+            quantity: 1,
+          });
+        }
+  
+        localStorage.setItem("cart", JSON.stringify(existingCart));
+        alert("Product added to cart!");
+      }
+    } catch (error) {
+      console.error("Add to cart error:", error);
+      alert("Failed to add product to cart");
+    }
+  };
+  
+    if (loading) {
+      return <div className="text-center my-5">Loading products...</div>;
+    }
   return (
     <>
+      <div className="ourp container my-5">
+              <div className="row">
+                {products.map((product) => (
+                  
+                  <div key={product._id} className="col-sm-12 col-md-6 col-lg-4">
+                    <div className="">
+                      <img
+                        style={{
+                          width: "100%",
+                          height: "250px",
+                          objectFit: "cover",
+                          borderRadius: "10px",
+                        }}
+                        src={
+                          product.productImg && product.productImg.length > 0
+                            ? product.productImg[0]
+                            : "/placeholder.jpg"
+                        }
+                        alt={product.name}
+                      />
+                      <div style={{ marginLeft: "-18px" }} className="card-body">
+                        <p className="text-muted small d-flex justify-content-between align-items-center">
+                          {product.category?.name || "No category"}
+                          <img src={P13} alt="" />
+                        </p>
       
+                        <h6 style={{ fontWeight: "bold" }} className="">
+                          {product.name}
+                        </h6>
+                        <div className="d-flex align-items-center justify-content-between small">
+                          <FaStar style={{ color: "#F58634" }} size={12} />
+                          <span
+                            style={{ marginLeft: "-13rem" }}
+                            className="text-muted small"
+                          >
+                            {product.rating || "0"}
+                            <span className="ml-1">
+                              ({product.reviewCount || "0"})
+                            </span>
+                          </span>
+                          <div className="">
+                            <h6 style={{ fontWeight: "bold" }} className="small">
+                              ${product.price}
+                            </h6>
+                          </div>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => addToCart(product)}
+                        style={{
+                          border: "1px solid",
+                          borderRadius: "5px",
+                          padding: "10px 20px",
+                          backgroundColor: "transparent",
+                          color: "#00A859",
+                        }}
+                        className="btn4 w-100 mt- mb-5"
+                      >
+                        Add to Cart
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
     </>
-  )
-}
+  );
+};
 
 export default OurProducts

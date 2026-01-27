@@ -16,6 +16,10 @@ const Header = () => {
     navigate("/");
     alert("Logged out successfully!");
   };
+
+  const handleProducts = () => {
+    navigate("/OurProducts");
+  }
   
   return (
     <nav className="container navbar navbar-expand-lg navbar-light ">
@@ -49,9 +53,13 @@ const Header = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link text-dark" href="#">
+              <button
+                onClick={handleProducts}
+                style={{backgroundColor:"transparent",
+                  border:'none',marginTop:"9px"
+                }}>
                 Our Products
-              </a>
+              </button>
             </li>
             <li className="nav-item">
               <a className="nav-link text-dark" href="#">
