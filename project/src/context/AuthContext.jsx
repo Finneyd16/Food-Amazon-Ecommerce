@@ -27,11 +27,14 @@ export const AuthProvider = ({ children }) => {
     const userData = await res.json();
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
+    
+    return userData; // ✅ ADDED: Return user data so Login.jsx can use it
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
+     localStorage.removeItem("cart");
   };
 
   return (

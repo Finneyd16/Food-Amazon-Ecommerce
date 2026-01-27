@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import P43 from "../assets/P43.png";
 import P1 from "../assets/P1.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -17,28 +17,12 @@ const Login = () => {
   const [error, setError] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-  // Redirect if already logged in
-  // useEffect(() => {
-  //   if (user) {
-  //     const intendedDestination = localStorage.getItem("intendedDestination");
-      
-  //     if (intendedDestination) {
-  //       // User came from checkout, go there
-  //       navigate(intendedDestination);
-  //       localStorage.removeItem("intendedDestination");
-  //     } else {
-  //       // User manually visited login while logged in, go back
-  //       navigate(-1);
-  //     }
-  //   }
-  // }, [user, navigate]);
-
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-    setError(""); // Clear error when user types
+    setError("");
   };
 
   const handleSubmit = async () => {
@@ -46,14 +30,37 @@ const Login = () => {
     setError("");
 
     try {
-      await login(formData.email, formData.password);
+      const loggedInUser = await login(formData.email, formData.password);
 
-      // Optional: Store email if remember me is checked
       if (rememberMe) {
         localStorage.setItem("rememberedEmail", formData.email);
       }
 
-      // Success! Navigate based on intended destination
+      // ✅ CART MIGRATION: Move localStorage cart to database
+      const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+      
+      if (localCart.length > 0 && loggedInUser) {
+        for (const item of localCart) {
+          try {
+            await fetch("http://localhost:3001/api/fooddocuments/carts/add-to-cart", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                customerId: loggedInUser._id,
+                productId: item.product._id,
+                quantity: item.quantity,
+              }),
+            });
+          } catch (cartError) {
+            console.error("Failed to migrate cart item:", cartError);
+          }
+        }
+        
+        // Clear localStorage cart after migration
+        localStorage.removeItem("cart");
+        console.log("Cart migrated to database!");
+      }
+
       alert("Login successful!");
       const intendedDestination = localStorage.getItem("intendedDestination") || "/";
       navigate(intendedDestination);

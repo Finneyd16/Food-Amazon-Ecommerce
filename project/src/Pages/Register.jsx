@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import P43 from "../assets/P43.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -43,23 +45,15 @@ const Register = () => {
         }
       );
 
-      // For register, token is in header
-      const token = response.headers.get("x-auth-token");
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data || "Registration failed");
+        throw new Error(data.message || "Registration failed");
       }
 
-      // Store token
-      if (token) {
-        localStorage.setItem("token", token);
-      }
-
-      // Success! Redirect or update app state
-      console.log("Registration successful!", data);
-      // window.location.href = "/dashboard"; // Redirect to dashboard
-      alert("Registration successful!");
+      // Success! Go to login page
+      alert("Registration successful! Please login.");
+      navigate("/Login");
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
     } finally {
@@ -96,11 +90,13 @@ const Register = () => {
           Already have an account?
           <span className="">
             <button
+              onClick={() => navigate("/Login")}
               className="signin-button"
               style={{
                 color: "#F58634",
                 border: "none",
                 backgroundColor: "white",
+                cursor: "pointer",
               }}
             >
               Sign In

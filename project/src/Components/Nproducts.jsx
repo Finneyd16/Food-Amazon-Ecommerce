@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
+import { useAuth } from "../context/AuthContext.jsx";
 import P13 from "../assets/P13.png";
 import P14 from "../assets/P14.png";
 
 const Nproduct = () => {
+  const { user } = useAuth();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch products from API
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -26,36 +27,62 @@ const Nproduct = () => {
     fetchProducts();
   }, []);
 
-  // Add to cart function (stores locally)
-  const addToCart = (product) => {
-    // Get existing cart from localStorage or create empty array
-    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-    
-    // Check if product already in cart
-    const existingItemIndex = existingCart.findIndex(
-      item => item.product._id === product._id
-    );
+  const addToCart = async (product) => {
+     try {
+    if (user) {
+      // User is logged in - add to database
+      const response = await fetch(
+        "http://localhost:3001/api/fooddocuments/carts/add-to-cart",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            customerId: user._id,
+            productId: product._id,
+            quantity: 1,
+          }),
+        }
+      );
 
-    if (existingItemIndex > -1) {
-      // Product exists, increase quantity
-      existingCart[existingItemIndex].quantity += 1;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error("Failed to add to cart");
+      }
+
+      alert("Product added to cart!");
     } else {
-      // New product, add to cart
-      existingCart.push({
-        product: {
-          _id: product._id,
-          name: product.name,
-          price: product.price,
-          productImg: product.productImg,
-        },
-        quantity: 1,
-      });
-    }
+      // Guest user - add to localStorage
+      const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+      
+      const existingItemIndex = existingCart.findIndex(
+        item => item.product._id === product._id
+      );
 
-    // Save updated cart to localStorage
-    localStorage.setItem("cart", JSON.stringify(existingCart));
-    alert("Product added to cart!");
-  };
+      if (existingItemIndex > -1) {
+        existingCart[existingItemIndex].quantity += 1;
+      } else {
+        existingCart.push({
+          product: {
+            _id: product._id,
+            name: product.name,
+            price: product.price,
+            productImg: product.productImg,
+          },
+          quantity: 1,
+        });
+      }
+
+      localStorage.setItem("cart", JSON.stringify(existingCart));
+      alert("Product added to cart!");
+    }
+  } catch (error) {
+    console.error("Add to cart error:", error);
+    alert("Failed to add product to cart");
+  }
+};
 
   if (loading) {
     return <div className="text-center my-5">Loading products...</div>;
