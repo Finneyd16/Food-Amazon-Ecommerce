@@ -6,6 +6,7 @@ import P9 from "../assets/P9.png";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
+import { FiShoppingCart } from "react-icons/fi";
 
 const Header = () => {
   const { user, logout } = useAuth();
@@ -19,8 +20,12 @@ const Header = () => {
 
   const handleProducts = () => {
     navigate("/OurProducts");
-  }
-  
+  };
+
+  const handleCarts = () => {
+    navigate("/Carts");
+  };
+
   return (
     <nav className="container navbar navbar-expand-lg navbar-light ">
       <div className=" container-fluid">
@@ -55,9 +60,12 @@ const Header = () => {
             <li className="nav-item">
               <button
                 onClick={handleProducts}
-                style={{backgroundColor:"transparent",
-                  border:'none',marginTop:"9px"
-                }}>
+                style={{
+                  backgroundColor: "transparent",
+                  border: "none",
+                  marginTop: "9px",
+                }}
+              >
                 Our Products
               </button>
             </li>
@@ -83,15 +91,15 @@ const Header = () => {
             </li>
             <li>
               <button className="p9 text-dark btn me-3">
-                <img style={{ marginLeft: '20px' }} src={P9} alt="" />
+                <img style={{ marginLeft: "20px" }} src={P9} alt="" />
               </button>
             </li>
             <li>
-              <button className=" p7 text-dark btn me-3 ">
-                <img
-                  style={{ marginRight: "2rem", marginTop: "-9px" }}
-                  src={P7}
-                  alt=""
+              <button className=" p7 text- btn me-3 " onClick={handleCarts}>
+                <FiShoppingCart
+                  size={24}
+                  color="#000" // Dark border color
+                  strokeWidth={2} // Border thickness
                 />
               </button>
             </li>
@@ -109,11 +117,11 @@ const Header = () => {
                 <a>Contact Us</a>
               </button>
             </li>
-            
+
             {/* Show Logout if logged in, Login if not */}
             {user ? (
               <li>
-                <button 
+                <button
                   onClick={handleLogout}
                   style={{
                     padding: "8px",
@@ -130,7 +138,7 @@ const Header = () => {
               </li>
             ) : (
               <li>
-                <button 
+                <button
                   onClick={() => navigate("/Login")}
                   style={{
                     padding: "5px 15px",

@@ -3,23 +3,36 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 
 function Checkout() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [customer, setCustomer] = useState(null);
+ 
   const [shippingInfo, setShippingInfo] = useState({
     address: "",
     city: "",
     state: "",
     zipCode: "",
-    country: "",
+    country: "Nigeria",
     phone: "",
+    firstName: "",
+    lastName: "",
   });
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [orderNote, setOrderNote] = useState("");
+  const [cardDetails, setCardDetails] = useState({
+    cardNumber: "",
+    expirationDate: "",
+    securityCode: "",
+    firstName: "",
+    lastName: "",
+    rememberCard: false,
+  });
 
   useEffect(() => {
+    // Wait for auth to load before checking user
+    if (authLoading) return;
+
     // Redirect if not logged in
     if (!user) {
       navigate("/Login");
@@ -27,34 +40,36 @@ function Checkout() {
     }
 
     fetchCheckoutData();
-  }, [user, navigate]);
+  }, [user, authLoading, navigate]);
 
   const fetchCheckoutData = async () => {
     try {
       // Fetch cart
       const cartResponse = await fetch(
-        `http://localhost:3001/api/fooddocuments/carts/get-cart/${user._id}`
+        `http://localhost:3001/api/fooddocuments/carts/get-cart/${user._id}`,
       );
       const cartData = await cartResponse.json();
       setCart(cartData);
 
       // Fetch customer info
       const customerResponse = await fetch(
-        `http://localhost:3001/api/fooddocuments/customers/${user._id}`
+        `http://localhost:3001/api/fooddocuments/customers/${user._id}`,
       );
-      
+
       if (customerResponse.ok) {
         const customerData = await customerResponse.json();
-        setCustomer(customerData);
         
+
         // Pre-fill shipping info if customer has it
         setShippingInfo({
           address: customerData.address || "",
           city: customerData.city || "",
           state: customerData.state || "",
           zipCode: customerData.zipCode || "",
-          country: customerData.country || "",
+          country: customerData.country || "Nigeria",
           phone: customerData.phone || "",
+          firstName: customerData.firstName || user?.name?.split(" ")[0] || "",
+          lastName: customerData.lastName || user?.name?.split(" ")[1] || "",
         });
       }
 
@@ -72,21 +87,51 @@ function Checkout() {
     });
   };
 
+  const handleCardInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setCardDetails({
+      ...cardDetails,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
+
   const calcSubtotal = () => {
     if (!cart?.cartItems) return 0;
     return cart.cartItems.reduce(
       (sum, item) => sum + item.product.price * item.quantity,
-      0
+      0,
     );
   };
 
   const handlePlaceOrder = async () => {
     try {
       // Validate shipping info
-      if (!shippingInfo.address || !shippingInfo.city || !shippingInfo.state || 
-          !shippingInfo.zipCode || !shippingInfo.country || !shippingInfo.phone) {
-        alert("Please fill in all shipping information");
+      if (
+        !shippingInfo.address ||
+        !shippingInfo.city ||
+        !shippingInfo.state ||
+        !shippingInfo.zipCode ||
+        !shippingInfo.country ||
+        !shippingInfo.phone ||
+        !shippingInfo.firstName ||
+        !shippingInfo.lastName
+      ) {
+        alert("Please fill in all billing details");
         return;
+      }
+
+      // Validate card details if card payment is selected
+      if (paymentMethod === "card") {
+        if (
+          !cardDetails.cardNumber ||
+          !cardDetails.expirationDate ||
+          !cardDetails.securityCode ||
+          !cardDetails.firstName ||
+          !cardDetails.lastName
+        ) {
+          alert("Please fill in all card details");
+          return;
+        }
       }
 
       if (!cart?.cartItems || cart.cartItems.length === 0) {
@@ -97,7 +142,7 @@ function Checkout() {
       // Create order
       const orderData = {
         customerId: user._id,
-        items: cart.cartItems.map(item => ({
+        items: cart.cartItems.map((item) => ({
           productId: item.product._id,
           quantity: item.quantity,
           price: item.product.price,
@@ -116,7 +161,7 @@ function Checkout() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(orderData),
-        }
+        },
       );
 
       if (!response.ok) {
@@ -130,7 +175,7 @@ function Checkout() {
         `http://localhost:3001/api/fooddocuments/carts/clear-cart/${user._id}`,
         {
           method: "DELETE",
-        }
+        },
       );
 
       alert("Order placed successfully!");
@@ -141,7 +186,8 @@ function Checkout() {
     }
   };
 
-  if (loading) {
+  // Show loading while auth is being checked
+  if (authLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-xl">Loading checkout...</div>
@@ -158,48 +204,80 @@ function Checkout() {
 
   return (
     <div className="container my-5">
-      <h2 className="text-3xl font-bold mb-6">Checkout</h2>
-
-      <div className="row">
-        {/* Shipping Information */}
-        <div className="col-md-7">
-          <div className="bg-white p-4 rounded shadow-sm mb-4">
-            <h3 className="text-xl font-bold mb-4">Shipping Information</h3>
-            
-            <div className="mb-3">
-              <label className="form-label">Full Name</label>
-              <input
-                type="text"
-                className="form-control"
-                value={user?.name || ""}
-                disabled
-              />
-            </div>
+      <div className="row g-4">
+        {/* Left Column - Billing Details */}
+        <div className="col-lg-7">
+          <div className="bg-white p-4 rounded shadow-sm">
+            <h3 className="h5 fw-bold mb-4">Billing Details</h3>
 
             <div className="mb-3">
-              <label className="form-label">Email</label>
+              <label className="form-label small text-muted">
+                Your email address
+              </label>
               <input
                 type="email"
                 className="form-control"
                 value={user?.email || ""}
                 disabled
+                style={{ backgroundColor: "#f8f9fa" }}
               />
             </div>
 
             <div className="mb-3">
-              <label className="form-label">Phone Number *</label>
-              <input
-                type="tel"
-                name="phone"
-                className="form-control"
-                value={shippingInfo.phone}
+              <label className="form-label small">Deliver to</label>
+                <input
+                  type="text"
+                  name="Residence"
+                  className="form-control"
+                  value={shippingInfo.Residence || ""}
+                  onChange={handleInputChange}
+                  placeholder="Residence"
+                />
+              
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label small fw-semibold">Country</label>
+              <select style={{width:"100%",height:"40px"}}
+                name="country"
+                className="form-select"
+                value={shippingInfo.country}
                 onChange={handleInputChange}
-                required
-              />
+              >
+                <option value="Nigeria">Nigeria</option>
+                <option value="Ghana">Ghana</option>
+                <option value="Kenya">Kenya</option>
+                <option value="South Africa">South Africa</option>
+              </select>
+            </div>
+
+            <div className="row mb-3">
+              <div className="col-6">
+                <label className="form-label small">Your first name</label>
+                <input
+                  type="text"
+                  name="firstName"
+                  className="form-control"
+                  value={shippingInfo.firstName}
+                  onChange={handleInputChange}
+                  placeholder="First name"
+                />
+              </div>
+              <div className="col-6">
+                <label className="form-label small">Your last name</label>
+                <input
+                  type="text"
+                  name="lastName"
+                  className="form-control"
+                  value={shippingInfo.lastName}
+                  onChange={handleInputChange}
+                  placeholder="Last name"
+                />
+              </div>
             </div>
 
             <div className="mb-3">
-              <label className="form-label">Address *</label>
+              <label className="form-label small">Your address</label>
               <input
                 type="text"
                 name="address"
@@ -207,96 +285,254 @@ function Checkout() {
                 value={shippingInfo.address}
                 onChange={handleInputChange}
                 placeholder="Street address"
-                required
               />
             </div>
 
-            <div className="row">
-              <div className="col-md-6 mb-3">
-                <label className="form-label">City *</label>
+            <div className="row mb-3">
+              <div className="col-4">
+                <label className="form-label small">City</label>
                 <input
                   type="text"
                   name="city"
                   className="form-control"
                   value={shippingInfo.city}
                   onChange={handleInputChange}
-                  required
+                  placeholder="City"
                 />
               </div>
-
-              <div className="col-md-6 mb-3">
-                <label className="form-label">State *</label>
-                <input
-                  type="text"
+              <div className="col-4">
+                <label className="form-label small">State</label>
+                <select style={{width:"100%",height:'39px'}}
                   name="state"
-                  className="form-control"
+                  className="form-select"
                   value={shippingInfo.state}
                   onChange={handleInputChange}
-                  required
-                />
+                >
+                  <option value="">Select State</option>
+                  <option value="Lagos">Lagos</option>
+                  <option value="Delta">Delta</option>
+                  <option value="Abuja">Abuja</option>
+                </select>
               </div>
-            </div>
-
-            <div className="row">
-              <div className="col-md-6 mb-3">
-                <label className="form-label">ZIP Code *</label>
+              <div className="col-4">
+                <label className="form-label small">Zip code</label>
                 <input
                   type="text"
                   name="zipCode"
                   className="form-control"
                   value={shippingInfo.zipCode}
                   onChange={handleInputChange}
-                  required
-                />
-              </div>
-
-              <div className="col-md-6 mb-3">
-                <label className="form-label">Country *</label>
-                <input
-                  type="text"
-                  name="country"
-                  className="form-control"
-                  value={shippingInfo.country}
-                  onChange={handleInputChange}
-                  required
+                  placeholder="Zip code"
                 />
               </div>
             </div>
 
             <div className="mb-3">
-              <label className="form-label">Order Notes (Optional)</label>
+              <label className="form-label small">Your phone number</label>
+              <input
+                type="tel"
+                name="phone"
+                className="form-control"
+                value={shippingInfo.phone}
+                onChange={handleInputChange}
+                placeholder="Phone number"
+              />
+            </div>
+
+            <div className="mb-0">
+              <label className="form-label small">Order Note (optional)</label>
               <textarea
                 className="form-control"
                 rows="3"
                 value={orderNote}
                 onChange={(e) => setOrderNote(e.target.value)}
-                placeholder="Special instructions for your order..."
+                placeholder="Tell us what do you think"
+                style={{ resize: "none" }}
               />
             </div>
           </div>
+        </div>
 
-          {/* Payment Method */}
-          <div className="bg-white p-4 rounded shadow-sm mb-4">
-            <h3 className="text-xl font-bold mb-4">Payment Method</h3>
-            
-            <div className="form-check mb-2">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="paymentMethod"
-                id="card"
-                value="card"
-                checked={paymentMethod === "card"}
-                onChange={(e) => setPaymentMethod(e.target.value)}
-              />
-              <label className="form-check-label" htmlFor="card">
-                Credit/Debit Card
-              </label>
+        {/* Right Column - Order Summary & Payment */}
+        <div className="col-lg-5">
+          <div className="bg-white p-4 rounded shadow-sm">
+            <h3 className="h5 fw-bold mb-4">Your Order</h3>
+
+            {/* Price Breakdown */}
+            <div className="mb-3">
+              <div className="d-flex justify-content-between mb-2">
+                <span className="small text-muted">Original Price</span>
+                <span className="small">${subtotal.toFixed(2)}</span>
+              </div>
+              <div className="d-flex justify-content-between mb-2">
+                <span className="small text-muted">Savings</span>
+                <span className="small">${savings.toFixed(2)}</span>
+              </div>
+              <div className="d-flex justify-content-between mb-2">
+                <span className="small text-muted">Shipping</span>
+                <span className="small text-success fw-semibold">FREE</span>
+              </div>
+              <div className="d-flex justify-content-between mb-3">
+                <span className="small text-muted">Estimated Sales Tax</span>
+                <span className="small">${tax.toFixed(2)}</span>
+              </div>
+
+              <hr />
+
+              <div className="d-flex justify-content-between mb-4">
+                <span className="fw-bold">Total</span>
+                <span className="fw-bold fs-5">${total.toFixed(2)}</span>
+              </div>
             </div>
 
-            <div className="form-check mb-2">
+            <hr />
+
+            {/* Payment Method */}
+            <h4 className="h6 fw-bold mb-3">Pay With</h4>
+
+            {/* Card Payment Option */}
+            <div className="mb-3">
+              <div className="form-check d-flex align-items-center mb-2">
+                <input
+                  className="form-check-input me-2"
+                  type="radio"
+                  name="paymentMethod"
+                  id="card"
+                  value="card"
+                  checked={paymentMethod === "card"}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                />
+                <label
+                  className="form-check-label d-flex align-items-center justify-content-between flex-grow-1"
+                  htmlFor="card"
+                >
+                  <span className="me-auto">Card</span>
+                  <div>
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg"
+                      alt="Visa"
+                      style={{ height: "20px", marginRight: "5px" }}
+                    />
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
+                      alt="Mastercard"
+                      style={{ height: "20px" }}
+                    />
+                  </div>
+                </label>
+              </div>
+
+              {/* Card Details Form - Show when card is selected */}
+              {paymentMethod === "card" && (
+                <div className="ms-4 p-3 border rounded bg-light">
+                  <div className="mb-3">
+                    <label className="form-label small">Card number</label>
+                    <input
+                      type="text"
+                      name="cardNumber"
+                      className="form-control"
+                      value={cardDetails.cardNumber}
+                      onChange={handleCardInputChange}
+                      placeholder="0000 0000 0000 0000"
+                      maxLength="19"
+                    />
+                  </div>
+
+                  <div className="row mb-3">
+                    <div className="col-6">
+                      <label className="form-label small">
+                        Expiration date
+                      </label>
+                      <input
+                        type="text"
+                        name="expirationDate"
+                        className="form-control"
+                        value={cardDetails.expirationDate}
+                        onChange={handleCardInputChange}
+                        placeholder="MM/YY"
+                        maxLength="5"
+                      />
+                    </div>
+                    <div className="col-6">
+                      <label className="form-label small">Security code</label>
+                      <input
+                        type="text"
+                        name="securityCode"
+                        className="form-control"
+                        value={cardDetails.securityCode}
+                        onChange={handleCardInputChange}
+                        placeholder="CVV"
+                        maxLength="4"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="row mb-3">
+                    <div className="col-6">
+                      <label className="form-label small">First name</label>
+                      <input
+                        type="text"
+                        name="firstName"
+                        className="form-control"
+                        value={cardDetails.firstName}
+                        onChange={handleCardInputChange}
+                        placeholder="First name"
+                      />
+                    </div>
+                    <div className="col-6">
+                      <label className="form-label small">Last name</label>
+                      <input
+                        type="text"
+                        name="lastName"
+                        className="form-control"
+                        value={cardDetails.lastName}
+                        onChange={handleCardInputChange}
+                        placeholder="Last name"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-check mb-3">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      name="rememberCard"
+                      id="rememberCard"
+                      checked={cardDetails.rememberCard}
+                      onChange={handleCardInputChange}
+                    />
+                    <label
+                      className="form-check-labe small"
+                      htmlFor="rememberCard"
+                    >
+                      Remember this card for future order
+                    </label>
+                  </div>
+
+                  <div className="d-flex align-items-center " style={{ gap: "10px" }}>
+                    <button
+                      className="btn btn-success flex-grow-1"
+                      onClick={() => {
+                        /* Handle card submission */
+                      }}
+                    >
+                      Done
+                    </button>
+                    <button
+                      className="btn btn-outline-secondary flex-grow-1"
+                      onClick={() => setPaymentMethod("")}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* PayPal Payment Option */}
+            <div className="form-check d-flex align-items-center mb-3">
               <input
-                className="form-check-input"
+                className="form-check-input me-2"
                 type="radio"
                 name="paymentMethod"
                 id="paypal"
@@ -304,85 +540,28 @@ function Checkout() {
                 checked={paymentMethod === "paypal"}
                 onChange={(e) => setPaymentMethod(e.target.value)}
               />
-              <label className="form-check-label" htmlFor="paypal">
-                PayPal
+              <label
+                className="form-check-label d-flex align-items-center justify-content-between flex-grow-1"
+                htmlFor="paypal"
+              >
+                <span className="me-auto">Paypal</span>
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg"
+                  alt="PayPal"
+                  style={{ height: "20px" }}
+                />
               </label>
             </div>
 
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="paymentMethod"
-                id="cash"
-                value="cash"
-                checked={paymentMethod === "cash"}
-                onChange={(e) => setPaymentMethod(e.target.value)}
-              />
-              <label className="form-check-label" htmlFor="cash">
-                Cash on Delivery
-              </label>
-            </div>
-          </div>
-        </div>
-
-        {/* Order Summary */}
-        <div className="col-md-5">
-          <div className="bg-white p-4 rounded shadow-sm">
-            <h3 className="text-xl font-bold mb-4">Order Summary</h3>
-
-            {/* Cart Items */}
-            <div className="mb-4">
-              {cartItems.map((item) => (
-                <div key={item.product._id} className="d-flex mb-3 pb-3 border-bottom">
-                  <img
-                    src={
-                      item.product.productImg && item.product.productImg.length > 0
-                        ? item.product.productImg[0]
-                        : "/placeholder.jpg"
-                    }
-                    alt={item.product.name}
-                    style={{ width: "60px", height: "60px", objectFit: "cover" }}
-                    className="rounded me-3"
-                  />
-                  <div className="flex-grow-1">
-                    <h6 className="mb-1">{item.product.name}</h6>
-                    <small className="text-muted">Qty: {item.quantity}</small>
-                  </div>
-                  <div className="text-end">
-                    <strong>${(item.product.price * item.quantity).toFixed(2)}</strong>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Price Breakdown */}
-            <div className="mb-3">
-              <div className="d-flex justify-content-between mb-2">
-                <span>Subtotal:</span>
-                <span>${subtotal.toFixed(2)}</span>
-              </div>
-              <div className="d-flex justify-content-between mb-2 text-success">
-                <span>Savings:</span>
-                <span>-${savings.toFixed(2)}</span>
-              </div>
-              <div className="d-flex justify-content-between mb-2">
-                <span>Shipping:</span>
-                <span className="text-success fw-bold">FREE</span>
-              </div>
-              <div className="d-flex justify-content-between mb-3">
-                <span>Tax:</span>
-                <span>${tax.toFixed(2)}</span>
-              </div>
-              <div className="d-flex justify-content-between pt-3 border-top">
-                <strong>Total:</strong>
-                <strong className="text-primary">${total.toFixed(2)}</strong>
-              </div>
-            </div>
-
+            {/* Place Order Button */}
             <button
               onClick={handlePlaceOrder}
-              className="btn btn-success w-100 py-3"
+              className="btn btn-warning w-100 py-3 fw-semibold"
+              style={{
+                backgroundColor: "#ff8c42",
+                border: "none",
+                color: "white",
+              }}
               disabled={cartItems.length === 0}
             >
               Place Order
