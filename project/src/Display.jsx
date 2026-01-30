@@ -11,6 +11,7 @@ import Register from "./Pages/Register.jsx";
 import Carts from "./Pages/Carts.jsx";
 import Checkout from "./Pages/Checkout.jsx";
 import OurProducts from "./Pages/OurProducts.jsx";
+import Verify from "./Pages/Verify";
 
 const Layout = () => {
   const location = useLocation();
@@ -35,6 +36,7 @@ const Layout = () => {
         <Route path="/Carts" element={<Carts />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/OurProducts" element={<OurProducts />} />
+        <Route path="/verify" element={<Verify />} />
         
       </Routes>
 

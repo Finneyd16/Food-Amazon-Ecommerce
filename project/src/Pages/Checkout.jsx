@@ -7,7 +7,7 @@ function Checkout() {
   const navigate = useNavigate();
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
- 
+  const [submitting, setSubmitting] = useState(false);
   const [shippingInfo, setShippingInfo] = useState({
     address: "",
     city: "",
@@ -17,6 +17,7 @@ function Checkout() {
     phone: "",
     firstName: "",
     lastName: "",
+    residence: "",
   });
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [orderNote, setOrderNote] = useState("");
@@ -30,10 +31,8 @@ function Checkout() {
   });
 
   useEffect(() => {
-    // Wait for auth to load before checking user
     if (authLoading) return;
 
-    // Redirect if not logged in
     if (!user) {
       navigate("/Login");
       return;
@@ -44,23 +43,19 @@ function Checkout() {
 
   const fetchCheckoutData = async () => {
     try {
-      // Fetch cart
       const cartResponse = await fetch(
         `http://localhost:3001/api/fooddocuments/carts/get-cart/${user._id}`,
       );
       const cartData = await cartResponse.json();
       setCart(cartData);
 
-      // Fetch customer info
       const customerResponse = await fetch(
         `http://localhost:3001/api/fooddocuments/customers/${user._id}`,
       );
 
       if (customerResponse.ok) {
         const customerData = await customerResponse.json();
-        
 
-        // Pre-fill shipping info if customer has it
         setShippingInfo({
           address: customerData.address || "",
           city: customerData.city || "",
@@ -70,6 +65,7 @@ function Checkout() {
           phone: customerData.phone || "",
           firstName: customerData.firstName || user?.name?.split(" ")[0] || "",
           lastName: customerData.lastName || user?.name?.split(" ")[1] || "",
+          residence: customerData.residence || "",
         });
       }
 
@@ -103,90 +99,124 @@ function Checkout() {
     );
   };
 
-  const handlePlaceOrder = async () => {
-    try {
-      // Validate shipping info
-      if (
-        !shippingInfo.address ||
-        !shippingInfo.city ||
-        !shippingInfo.state ||
-        !shippingInfo.zipCode ||
-        !shippingInfo.country ||
-        !shippingInfo.phone ||
-        !shippingInfo.firstName ||
-        !shippingInfo.lastName
-      ) {
-        alert("Please fill in all billing details");
-        return;
-      }
+ const handlePlaceOrder = async () => {
+  try {
+    setSubmitting(true);
 
-      // Validate card details if card payment is selected
-      if (paymentMethod === "card") {
-        if (
-          !cardDetails.cardNumber ||
-          !cardDetails.expirationDate ||
-          !cardDetails.securityCode ||
-          !cardDetails.firstName ||
-          !cardDetails.lastName
-        ) {
-          alert("Please fill in all card details");
-          return;
-        }
-      }
-
-      if (!cart?.cartItems || cart.cartItems.length === 0) {
-        alert("Your cart is empty");
-        return;
-      }
-
-      // Create order
-      const orderData = {
-        customerId: user._id,
-        items: cart.cartItems.map((item) => ({
-          productId: item.product._id,
-          quantity: item.quantity,
-          price: item.product.price,
-        })),
-        shippingAddress: shippingInfo,
-        paymentMethod: paymentMethod,
-        orderNote: orderNote,
-        totalAmount: total,
-      };
-
-      const response = await fetch(
-        "http://localhost:3001/api/fooddocuments/orders/create-order",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(orderData),
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to create order");
-      }
-
-      const order = await response.json();
-
-      // Clear cart after successful order
-      await fetch(
-        `http://localhost:3001/api/fooddocuments/carts/clear-cart/${user._id}`,
-        {
-          method: "DELETE",
-        },
-      );
-
-      alert("Order placed successfully!");
-      navigate("/order-confirmation", { state: { order } });
-    } catch (error) {
-      console.error("Place order error:", error);
-      alert("Failed to place order. Please try again.");
+    // Validate shipping info
+    if (
+      !shippingInfo.address ||
+      !shippingInfo.city ||
+      !shippingInfo.state ||
+      !shippingInfo.zipCode ||
+      !shippingInfo.country ||
+      !shippingInfo.phone ||
+      !shippingInfo.firstName ||
+      !shippingInfo.lastName
+    ) {
+      alert("Please fill in all billing details");
+      setSubmitting(false);
+      return;
     }
-  };
 
-  // Show loading while auth is being checked
+    // Validate card details if card payment is selected
+    if (paymentMethod === "card") {
+      if (
+        !cardDetails.cardNumber ||
+        !cardDetails.expirationDate ||
+        !cardDetails.securityCode ||
+        !cardDetails.firstName ||
+        !cardDetails.lastName
+      ) {
+        alert("Please fill in all card details");
+        setSubmitting(false);
+        return;
+      }
+    }
+
+    if (!cart?.cartItems || cart.cartItems.length === 0) {
+      alert("Your cart is empty");
+      setSubmitting(false);
+      return;
+    }
+
+    const orderData = {
+      customerId: user._id,
+      customerSnapshot: {
+        name: `${shippingInfo.firstName} ${shippingInfo.lastName}`,
+        emailAddress: user.email,
+        phoneNumber: shippingInfo.phone,
+        shippingAddress: {
+          address: shippingInfo.address,
+          city: shippingInfo.city,
+          state: shippingInfo.state,
+          zipCode: shippingInfo.zipCode,
+          country: shippingInfo.country,
+          residence: shippingInfo.residence,
+        }
+      },
+      orderNote: orderNote,
+      items: cart.cartItems.map(item => ({
+        productId: item.product._id,
+        name: item.product.name,
+        image: item.product.productImg && item.product.productImg.length > 0 
+          ? item.product.productImg[0] 
+          : "",
+        price: item.product.price,
+        quantity: item.quantity,
+      })),
+      totalAmount: total,
+      paymentMethod: paymentMethod === "paystack" ? "paystack" : "card",
+      paymentGateway: "paystack",
+    };
+
+    console.log("📤 Sending order data:", JSON.stringify(orderData, null, 2));
+
+    const response = await fetch(
+      "http://localhost:3001/api/fooddocuments/orders/create",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      },
+    );
+
+    const rawText = await response.text();
+    console.log("📥 Raw response:", rawText);
+    console.log("📊 Status:", response.status);
+
+    let result;
+    try {
+      result = JSON.parse(rawText);
+      console.log("✅ Parsed result:", result);
+    } catch (parseError) {
+      console.error("❌ JSON Parse Error:", parseError);
+      console.error("❌ Response was:", rawText);
+      alert(`Server error: ${rawText.substring(0, 200)}`);
+      setSubmitting(false);
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error(result.message || result.error || "Failed to create order");
+    }
+
+    if (result.authorizationUrl) {
+      console.log("🔗 Redirecting to:", result.authorizationUrl);
+      window.location.href = result.authorizationUrl;
+    } else {
+      throw new Error("No payment URL received");
+    }
+
+  } catch (error) {
+    console.error("❌ Place order error:", error);
+    alert(error.message || "Failed to place order. Please try again.");
+    setSubmitting(false);
+  }
+};
+
   if (authLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -225,20 +255,20 @@ function Checkout() {
 
             <div className="mb-3">
               <label className="form-label small">Deliver to</label>
-                <input
-                  type="text"
-                  name="Residence"
-                  className="form-control"
-                  value={shippingInfo.Residence || ""}
-                  onChange={handleInputChange}
-                  placeholder="Residence"
-                />
-              
+              <input
+                type="text"
+                name="residence"
+                className="form-control"
+                value={shippingInfo.residence || ""}
+                onChange={handleInputChange}
+                placeholder="Residence"
+              />
             </div>
 
             <div className="mb-3">
               <label className="form-label small fw-semibold">Country</label>
-              <select style={{width:"100%",height:"40px"}}
+              <select
+                style={{ width: "100%", height: "40px" }}
                 name="country"
                 className="form-select"
                 value={shippingInfo.country}
@@ -302,7 +332,8 @@ function Checkout() {
               </div>
               <div className="col-4">
                 <label className="form-label small">State</label>
-                <select style={{width:"100%",height:'39px'}}
+                <select
+                  style={{ width: "100%", height: "39px" }}
                   name="state"
                   className="form-select"
                   value={shippingInfo.state}
@@ -422,7 +453,7 @@ function Checkout() {
                 </label>
               </div>
 
-              {/* Card Details Form - Show when card is selected */}
+              {/* Card Details Form */}
               {paymentMethod === "card" && (
                 <div className="ms-4 p-3 border rounded bg-light">
                   <div className="mb-3">
@@ -502,31 +533,42 @@ function Checkout() {
                       onChange={handleCardInputChange}
                     />
                     <label
-                      className="form-check-labe small"
+                      className="form-check-label small"
                       htmlFor="rememberCard"
                     >
                       Remember this card for future order
                     </label>
                   </div>
 
-                  <div className="d-flex align-items-center " style={{ gap: "10px" }}>
-                    <button
-                      className="btn btn-success flex-grow-1"
-                      onClick={() => {
-                        /* Handle card submission */
-                      }}
-                    >
-                      Done
-                    </button>
-                    <button
-                      className="btn btn-outline-secondary flex-grow-1"
-                      onClick={() => setPaymentMethod("")}
-                    >
-                      Cancel
-                    </button>
-                  </div>
+                  <small className="text-muted d-block mb-2">
+                    🔒 Powered by Paystack - Your card details are secure
+                  </small>
                 </div>
               )}
+            </div>
+
+            {/* Paystack Payment Option */}
+            <div className="form-check d-flex align-items-center mb-3">
+              <input
+                className="form-check-input me-2"
+                type="radio"
+                name="paymentMethod"
+                id="paystack"
+                value="paystack"
+                checked={paymentMethod === "paystack"}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              />
+              <label
+                className="form-check-label d-flex align-items-center justify-content-between flex-grow-1"
+                htmlFor="paystack"
+              >
+                <span className="">Paystack (Card, Bank Transfer, USSD)</span>
+                <img
+                  src="https://paystack.com/assets/img/logo/full-blue.svg"
+                  alt="Paystack"
+                  style={{ height: "18px" }}
+                />
+              </label>
             </div>
 
             {/* PayPal Payment Option */}
@@ -562,10 +604,14 @@ function Checkout() {
                 border: "none",
                 color: "white",
               }}
-              disabled={cartItems.length === 0}
+              disabled={cartItems.length === 0 || submitting}
             >
-              Place Order
+              {submitting ? "Processing..." : "Place Order"}
             </button>
+
+            <p className="text-center text-muted small mt-3 mb-0">
+              🔒 Your payment information is secure
+            </p>
           </div>
         </div>
       </div>
