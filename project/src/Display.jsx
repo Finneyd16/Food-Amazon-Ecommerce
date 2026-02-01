@@ -18,9 +18,11 @@ import AdminDashboard from "./Pages/Admin/AdminDashboard";
 const Layout = () => {
   const location = useLocation();
 
-  const hideOn = ["/Login", "/login", "/Register"];
 
-  const hideLayout = hideOn.includes(location.pathname);
+  const hideOn = ["/Login", "/login", "/Register"];
+  const isAdminPage = location.pathname.startsWith('/Admin');
+  
+  const hideLayout = hideOn.includes(location.pathname) || isAdminPage;
 
   return (
     <>
@@ -39,6 +41,7 @@ const Layout = () => {
         <Route path="/OurProducts" element={<OurProducts />} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard/></AdminRoute>} />
+       
       </Routes>
 
       {!hideLayout && <Footer />}

@@ -36,7 +36,7 @@ const Login = () => {
         localStorage.setItem("rememberedEmail", formData.email);
       }
 
-      // ✅ CART MIGRATION: Move localStorage cart to database
+      //  CART MIGRATION: Move localStorage cart to database
       const localCart = JSON.parse(localStorage.getItem("cart")) || [];
       
       if (localCart.length > 0 && loggedInUser) {
