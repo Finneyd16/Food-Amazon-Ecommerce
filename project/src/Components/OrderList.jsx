@@ -1,11 +1,7 @@
 import React from 'react';
 
-
 const OrderList = ({ orders }) => {
-  // Get the 4 most recent orders
-  const recentOrders = orders
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    .slice(0, 4);
+  console.log('Recent Orders:', orders);
 
   const formatDate = (date) => {
     const d = new Date(date);
@@ -21,17 +17,16 @@ const OrderList = ({ orders }) => {
 
   const getStatusClass = (status) => {
     const statusMap = {
-      'delivered': 'success',
-      'completed': 'success',
-      'paid': 'success',
-      'shipped': 'info',
-      'processing': 'warning',
-      'pending': 'warning',
-      'cancelled': 'danger',
-      'declined': 'danger',
-      'refunded': 'danger'
+      'Delivered': 'success',
+      'Completed': 'success',
+      'Paid': 'success',
+      'Shipped': 'info',
+      'Processing': 'warning',
+      'Pending': 'warning',
+      'Cancelled': 'danger',
+      'Declined': 'danger'
     };
-    return statusMap[status?.toLowerCase()] || 'secondary';
+    return statusMap[status] || 'secondary';
   };
 
   return (
@@ -45,23 +40,23 @@ const OrderList = ({ orders }) => {
         </div>
       </div>
       <div className="orders-list">
-        {recentOrders.length > 0 ? (
-          recentOrders.map((order, index) => (
+        {orders && orders.length > 0 ? (
+          orders.slice(0, 4).map((order, index) => (
             <div key={order._id || index} className="order-item">
               <div className="order-info">
                 <div className="order-number">
-                  {order.paymentStatus === 'paid' ? 'Payment from' : 'Process delivery to'} #{order._id?.slice(-6)}
+                  {order.paymentStatus === 'Paid' ? 'Payment from' : 'Process delivery to'} #{order._id?.slice(-6)}
                 </div>
                 <div className="order-date">{formatDate(order.createdAt)}</div>
               </div>
               <div className="order-details">
                 <div className="order-amount">${order.totalAmount?.toFixed(2) || '0.00'}</div>
                 <span className={`badge badge-${
-                  getStatusClass(order.deliveryStatus || order.paymentStatus)
+                  getStatusClass(order.orderStatus || order.paymentStatus)
                 } status-badge`}>
-                  {order.deliveryStatus === 'delivered' || order.paymentStatus === 'paid' 
+                  {order.orderStatus === 'Delivered' || order.paymentStatus === 'Paid' 
                     ? 'Completed' 
-                    : order.deliveryStatus || order.paymentStatus || 'Pending'}
+                    : order.orderStatus || order.paymentStatus || 'Pending'}
                 </span>
               </div>
             </div>

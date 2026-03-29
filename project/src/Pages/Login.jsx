@@ -61,7 +61,7 @@ const Login = () => {
         console.log("Cart migrated to database!");
       }
 
-      alert("Login successful!");
+      
       const intendedDestination = localStorage.getItem("intendedDestination") || "/";
       navigate(intendedDestination);
       localStorage.removeItem("intendedDestination");

@@ -1,40 +1,23 @@
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
-
 const DailyVisitsChart = ({ products, orders }) => {
-  // Calculate product sales
-  const productSales = products.map(product => {
-    const productOrders = orders.filter(order => 
-      order.items?.some(item => item.productId === product._id || item.product === product._id)
-    );
-    
-    const totalSold = productOrders.reduce((sum, order) => {
-      const item = order.items.find(i => i.productId === product._id || i.product === product._id);
-      return sum + (item?.quantity || 0);
-    }, 0);
-    
-    return {
-      name: product.name,
-      value: totalSold
-    };
-  });
-  
-  // Get top 4 products
-  const topProducts = productSales
-    .sort((a, b) => b.value - a.value)
-    .slice(0, 4)
-    .map((product, index) => ({
-      ...product,
-      color: ['#4CAF50', '#2196F3', '#FF9800', '#F44336'][index]
-    }));
+  console.log('DailyVisits - Products:', products);
+  console.log('DailyVisits - Orders:', orders);
+
+  // Use top products data directly
+  const topProducts = products.slice(0, 4).map((product, index) => ({
+    name: product.productName || 'Unknown',
+    value: product.totalQuantitySold || 0,
+    color: ['#4CAF50', '#2196F3', '#FF9800', '#F44336'][index]
+  }));
   
   const totalVisits = topProducts.reduce((sum, item) => sum + item.value, 0);
   
   // Calculate percentages
   const data = topProducts.map(item => ({
     ...item,
-    percentage: ((item.value / totalVisits) * 100).toFixed(1)
+    percentage: totalVisits > 0 ? ((item.value / totalVisits) * 100).toFixed(1) : 0
   }));
   
   // Calculate remaining for circle completion
@@ -50,7 +33,7 @@ const DailyVisitsChart = ({ products, orders }) => {
     for (let i = 6; i >= 0; i--) {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
-      const dayName = days[date.getDay() === 0 ? 6 : date.getDay() - 1]; // Adjust for Sunday
+      const dayName = days[date.getDay() === 0 ? 6 : date.getDay() - 1];
       
       const dayOrders = orders.filter(order => {
         const orderDate = new Date(order.createdAt);

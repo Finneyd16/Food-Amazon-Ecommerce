@@ -14,7 +14,6 @@ const AdminDashboard = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [loading, setLoading] = useState(true);
   
-  
   const [stats, setStats] = useState({
     totalOrders: 0,
     totalProducts: 0,
@@ -29,41 +28,62 @@ const AdminDashboard = () => {
     fetchDashboardData();
   }, []);
 
-  const fetchDashboardData = async () => {
-    try {
-      setLoading(true);
-      
-      
-      const [ordersRes, productsRes, customersRes] = await Promise.all([
-        fetch('http://localhost:3001/api/fooddocuments/orders'),
-        fetch('http://localhost:3001/api/fooddocuments/products/get-all-products'),
-        fetch('http://localhost:3001/api/fooddocuments/customers')
-      ]);
-
-      const ordersData = await ordersRes.json();
-      const productsData = await productsRes.json();
-      const customersData = await customersRes.json();
-
-      // Calculate total revenue
-      const totalRevenue = ordersData.reduce((sum, order) => sum + (order.totalAmount || 0), 0);
-
-      setStats({
-        totalOrders: ordersData.length,
-        totalProducts: productsData.length,
-        totalCustomers: customersData.length,
-        totalRevenue: totalRevenue,
-      });
-
-      setOrders(ordersData);
-      setProducts(productsData);
-      setCustomers(customersData);
-      
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching dashboard data:', error);
-      setLoading(false);
+const fetchDashboardData = async () => {
+  try {
+    setLoading(true);
+    
+    const token = user?.token;
+    
+    if (!token) {
+      console.error('No token found');
+      window.location.href = '/login';
+      return;
     }
-  };
+    
+    const fetchOptions = {
+      headers: {
+        'x-auth-token': token,
+        'Content-Type': 'application/json'
+      }
+    };
+    
+    const [overviewRes, ordersRes, productsRes, customersRes] = await Promise.all([
+      fetch('http://localhost:3001/api/fooddocuments/dashboard/overview', fetchOptions),
+      fetch('http://localhost:3001/api/fooddocuments/dashboard/recent-orders?limit=50', fetchOptions),
+      fetch('http://localhost:3001/api/fooddocuments/dashboard/products', fetchOptions), // CHANGED: Use /products instead of /top-products
+      fetch('http://localhost:3001/api/fooddocuments/dashboard/customers', fetchOptions)
+    ]);
+
+    // Check for auth errors
+    if (overviewRes.status === 400 || overviewRes.status === 401) {
+      console.error('Token expired or invalid');
+      logout();
+      window.location.href = '/login';
+      return;
+    }
+
+    const overviewData = await overviewRes.json();
+    const ordersData = await ordersRes.json();
+    const productsData = await productsRes.json();
+    const customersData = await customersRes.json();
+
+    setStats({
+      totalOrders: overviewData.totalOrders,
+      totalProducts: overviewData.totalProducts,
+      totalCustomers: overviewData.totalCustomers,
+      totalRevenue: overviewData.totalRevenue,
+    });
+
+    setOrders(ordersData);
+    setProducts(productsData);
+    setCustomers(customersData);
+    
+    setLoading(false);
+  } catch (error) {
+    console.error('Error fetching dashboard data:', error);
+    setLoading(false);
+  }
+};
 
   // Transform real data into the format needed for MetricCards
   const metrics = [
@@ -126,7 +146,7 @@ const AdminDashboard = () => {
             <div className="position-relative mr-3">
               <i className="fas fa-bell" style={{ fontSize: '20px', color: '#666' }}></i>
               <span className="badge badge-danger badge-pill notification-badge">
-                {orders.filter(o => o.deliveryStatus === 'pending').length}
+                {orders.filter(o => o.orderStatus === 'Pending').length}
               </span>
             </div>
             <div className="d-flex align-items-center">
@@ -163,7 +183,7 @@ const AdminDashboard = () => {
         {/* Tables Row */}
         <div className="row mb-4">
           <div className="col-lg-7 mb-3">
-            <BestSellingProducts products={products} orders={orders} />
+            <BestSellingProducts products={products} />
           </div>
           <div className="col-lg-5 mb-3">
             <div className="row">

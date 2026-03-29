@@ -15,7 +15,7 @@ const Header = () => {
   const handleLogout = () => {
     logout();
     navigate("/");
-    alert("Logged out successfully!");
+    
   };
 
   const handleProducts = () => {

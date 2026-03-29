@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
     
-    return userData; // ✅ ADDED: Return user data so Login.jsx can use it
+    return userData; //  ADDED: Return user data so Login.jsx can use it
   };
 
   const logout = () => {

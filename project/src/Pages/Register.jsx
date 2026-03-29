@@ -52,7 +52,7 @@ const Register = () => {
       }
 
       // Success! Go to login page
-      alert("Registration successful! Please login.");
+      
       navigate("/Login");
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");

@@ -52,7 +52,7 @@ const ProductGrid = () => {
         throw new Error("Failed to add to cart");
       }
 
-      alert("Product added to cart!");
+    
     } else {
       // Guest user - add to localStorage
       const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -76,7 +76,7 @@ const ProductGrid = () => {
       }
 
       localStorage.setItem("cart", JSON.stringify(existingCart));
-      alert("Product added to cart!");
+     
     }
   } catch (error) {
     console.error("Add to cart error:", error);
