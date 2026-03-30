@@ -7,6 +7,7 @@ import DailyVisitsChart from '../../Components/DailyVisitCharts.jsx';
 import BestSellingProducts from '../../Components/BestSellingProducts.jsx';
 import NewCustomersList from '../../Components/NewCustomersList.jsx';
 import OrderList from '../../Components/OrderList.jsx';
+import API_BASE_URL from '../../Config.js';
 
 
 const AdminDashboard = () => {
@@ -48,12 +49,11 @@ const fetchDashboardData = async () => {
     };
     
     const [overviewRes, ordersRes, productsRes, customersRes] = await Promise.all([
-      fetch('http://localhost:3001/api/fooddocuments/dashboard/overview', fetchOptions),
-      fetch('http://localhost:3001/api/fooddocuments/dashboard/recent-orders?limit=50', fetchOptions),
-      fetch('http://localhost:3001/api/fooddocuments/dashboard/products', fetchOptions), // CHANGED: Use /products instead of /top-products
-      fetch('http://localhost:3001/api/fooddocuments/dashboard/customers', fetchOptions)
+      fetch(`${API_BASE_URL}/api/fooddocuments/dashboard/overview`, fetchOptions),
+      fetch(`${API_BASE_URL}/api/fooddocuments/dashboard/recent-orders?limit=50`, fetchOptions),
+      fetch(`${API_BASE_URL}/api/fooddocuments/dashboard/products`, fetchOptions),
+      fetch(`${API_BASE_URL}/api/fooddocuments/dashboard/customers`, fetchOptions)
     ]);
-
     // Check for auth errors
     if (overviewRes.status === 400 || overviewRes.status === 401) {
       console.error('Token expired or invalid');
