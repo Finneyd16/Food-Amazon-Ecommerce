@@ -4,6 +4,7 @@ import P1 from "../assets/P1.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
+import API_BASE_URL from '../Config';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const Login = () => {
       if (localCart.length > 0 && loggedInUser) {
         for (const item of localCart) {
           try {
-            await fetch("http://localhost:3001/api/fooddocuments/carts/add-to-cart", {
+            await fetch(`${API_BASE_URL}/api/fooddocuments/carts/add-to-cart`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import API_BASE_URL from '../Config';
 
 function Verify() {
   const [searchParams] = useSearchParams();
@@ -14,7 +15,7 @@ function Verify() {
   const verifyPayment = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3001/api/fooddocuments/orders/confirm",
+        `${API_BASE_URL}/api/fooddocuments/orders/confirm`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -31,7 +32,7 @@ function Verify() {
         const user = JSON.parse(localStorage.getItem("user"));
         if (user) {
           await fetch(
-            `http://localhost:3001/api/fooddocuments/carts/clear-cart/${user._id}`,
+            `${API_BASE_URL}/api/fooddocuments/carts/clear-cart/${user._id}`,
             { method: "DELETE" }
           );
         }

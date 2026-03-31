@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
+import API_BASE_URL from '../Config';
 
 function Checkout() {
   const { user, loading: authLoading } = useAuth();
@@ -44,13 +45,13 @@ function Checkout() {
   const fetchCheckoutData = async () => {
     try {
       const cartResponse = await fetch(
-        `http://localhost:3001/api/fooddocuments/carts/get-cart/${user._id}`,
+        `${API_BASE_URL}/api/fooddocuments/carts/get-cart/${user._id}`,
       );
       const cartData = await cartResponse.json();
       setCart(cartData);
 
       const customerResponse = await fetch(
-        `http://localhost:3001/api/fooddocuments/customers/${user._id}`,
+        `${API_BASE_URL}/api/fooddocuments/customers/${user._id}`,
       );
 
       if (customerResponse.ok) {

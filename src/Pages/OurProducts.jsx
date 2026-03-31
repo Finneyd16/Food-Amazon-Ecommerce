@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext.jsx";
 import P13 from "../assets/P13.png";
+import API_BASE_URL from '../Config';
 
 const OurProducts = () => {
    const { user } = useAuth();
@@ -13,7 +14,7 @@ const OurProducts = () => {
       const fetchProducts = async () => {
         try {
           const response = await fetch(
-            "http://localhost:3001/api/fooddocuments/products/get-all-products",
+            `${API_BASE_URL}/api/fooddocuments/products/get-all-products`,
           );
           const data = await response.json();
           setProducts(data);

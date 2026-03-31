@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import P43 from "../assets/P43.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import API_BASE_URL from '../Config';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -35,14 +36,14 @@ const Register = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:3001/api/fooddocuments/auth/register",
+        `${API_BASE_URL}/api/fooddocuments/auth/register`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formData),
-        }
+        },
       );
 
       const data = await response.json();
@@ -52,7 +53,7 @@ const Register = () => {
       }
 
       // Success! Go to login page
-      
+
       navigate("/Login");
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");

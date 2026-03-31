@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
+import API_BASE_URL from '../Config';
 
 function Carts() {
   const { user, loading: authLoading } = useAuth();
@@ -19,7 +20,7 @@ function Carts() {
       if (user && CUSTOMER_ID) {
         // Logged in - fetch from database
         const response = await fetch(
-          `http://localhost:3001/api/fooddocuments/carts/get-cart/${CUSTOMER_ID}`,
+          `${API_BASE_URL}/api/fooddocuments/carts/get-cart/${CUSTOMER_ID}`,
           {
             method: "GET",
             headers: {

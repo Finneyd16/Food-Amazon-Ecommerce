@@ -3,6 +3,7 @@ import { FaStar } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext.jsx";
 import P13 from "../assets/P13.png";
 import P14 from "../assets/P14.png";
+import API_BASE_URL from '../Config';
 
 const Nproduct = () => {
   const { user } = useAuth();
@@ -13,7 +14,7 @@ const Nproduct = () => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/fooddocuments/products/get-all-products",
+          `${API_BASE_URL}/api/fooddocuments/products/get-all-products`,
         );
         const data = await response.json();
         setProducts(data);
@@ -32,7 +33,7 @@ const Nproduct = () => {
     if (user) {
       // User is logged in - add to database
       const response = await fetch(
-        "http://localhost:3001/api/fooddocuments/carts/add-to-cart",
+        `${API_BASE_URL}/api/fooddocuments/carts/add-to-cart`,
         {
           method: "POST",
           headers: {
