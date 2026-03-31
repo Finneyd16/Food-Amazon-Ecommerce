@@ -6,7 +6,7 @@ import ScrollToTop from "./Components/ScrollToTop.jsx";
 import Landing from "./Pages/Landing";
 import Login from "./Pages/Login.jsx";
 import OrdersGrid from "./Components/Bulkorder.jsx";
-import OrderNow from "./Pages/OrderNow.jsx";
+import OrderNow from "./Pages/Ordernow.jsx";
 import Register from "./Pages/Register.jsx";
 import Carts from "./Pages/Carts.jsx";
 import Checkout from "./Pages/Checkout.jsx";
