@@ -13,7 +13,7 @@ import P42 from "../assets/P42.png";
 import ProductGrid from "../Components/Products";
 
 
-const Ordernow = () => {
+const OrderNow = () => {
   const { id } = useParams();
 
   const [quantity, setQuantity] = useState(1);
@@ -480,4 +480,4 @@ const Ordernow = () => {
   }
 };
 
-export default Ordernow;
+export default OrderNow;
