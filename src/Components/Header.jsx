@@ -1,6 +1,6 @@
 import React from "react";
 import P1 from "../assets/P1.png";
-import P7 from "../assets/P7.png";
+
 import P8 from "../assets/P8.png";
 import P9 from "../assets/P9.png";
 import { Link } from "react-router-dom";
