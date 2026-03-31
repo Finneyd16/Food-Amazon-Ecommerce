@@ -31,6 +31,8 @@ const OurProducts = () => {
     const addToCart = async (product) => {
        try {
       if (user) {
+        console.log("User ID:", user._id); // add this
+      console.log("Product ID:", product._id);
         // User is logged in - add to database
         const response = await fetch(
           `${API_BASE_URL}/api/fooddocuments/carts/add-to-cart`,
