@@ -40,9 +40,9 @@ export const AuthProvider = ({ children }) => {
         }
       );
 
-      if (!res.ok) {
-        const errorText = await res.text();
-        throw new Error(errorText || "Login failed");
+       if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Login failed"); // 
       }
 
       const userData = await res.json();
