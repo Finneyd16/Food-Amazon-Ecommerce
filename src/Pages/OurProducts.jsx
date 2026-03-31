@@ -33,7 +33,7 @@ const OurProducts = () => {
       if (user) {
         // User is logged in - add to database
         const response = await fetch(
-          "http://localhost:3001/api/fooddocuments/carts/add-to-cart",
+          `${API_BASE_URL}/api/fooddocuments/carts/add-to-cart`,
           {
             method: "POST",
             headers: {
