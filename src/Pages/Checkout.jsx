@@ -174,7 +174,7 @@ function Checkout() {
     console.log("📤 Sending order data:", JSON.stringify(orderData, null, 2));
 
     const response = await fetch(
-      "http://localhost:3001/api/fooddocuments/orders/create",
+      `${API_BASE_URL}/api/fooddocuments/orders/create`,
       {
         method: "POST",
         headers: {

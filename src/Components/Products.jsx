@@ -5,6 +5,7 @@ import P13 from "../assets/P13.png";
 import P14 from "../assets/P14.png";
 import API_BASE_URL from '../Config';
 
+
 const ProductGrid = () => {
   const { user } = useAuth();
   const [products, setProducts] = useState([]);
@@ -33,7 +34,7 @@ const ProductGrid = () => {
     if (user) {
       // User is logged in - add to database
       const response = await fetch(
-        "http://localhost:3001/api/fooddocuments/carts/add-to-cart",
+        `${API_BASE_URL}/api/fooddocuments/carts/add-to-cart`,
         {
           method: "POST",
           headers: {
