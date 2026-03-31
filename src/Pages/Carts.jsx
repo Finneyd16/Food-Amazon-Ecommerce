@@ -70,7 +70,7 @@ function Carts() {
         }));
 
         const response = await fetch(
-          `http://localhost:3001/api/fooddocuments/carts/update-cart-item/${CUSTOMER_ID}/${productId}`,
+          `${API_BASE_URL}/fooddocuments/carts/update-cart-item/${CUSTOMER_ID}/${productId}`,
           {
             method: "PUT",
             headers: {
@@ -112,7 +112,7 @@ function Carts() {
         }));
 
         const response = await fetch(
-          `http://localhost:3001/api/fooddocuments/carts/remove-from-cart/${CUSTOMER_ID}/${productId}`,
+          `${API_BASE_URL}/api/fooddocuments/carts/remove-from-cart/${CUSTOMER_ID}/${productId}`,
           {
             method: "DELETE",
             headers: {
