@@ -6,7 +6,7 @@ import ScrollToTop from "./Components/ScrollToTop.jsx";
 import Landing from "./Pages/Landing";
 import Login from "./Pages/Login.jsx";
 import OrdersGrid from "./Components/Bulkorder.jsx";
-import Ordernow from "./Pages/Ordernow.jsx";
+// import Ordernow from "./Pages/Ordernow.jsx";
 import Register from "./Pages/Register.jsx";
 import Carts from "./Pages/Carts.jsx";
 import Checkout from "./Pages/Checkout.jsx";
@@ -34,7 +34,7 @@ const Layout = () => {
         <Route path="/" element={<Landing />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/OrdersGrid" element={<OrdersGrid />} />
-        <Route path="/Ordernow/:id" element={<Ordernow />} />
+        {/* <Route path="/Ordernow/:id" element={<Ordernow />} /> */}
         <Route path="/Register" element={<Register />} />
         <Route path="/Carts" element={<Carts />} />
         <Route path="/checkout" element={<Checkout />} />
