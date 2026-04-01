@@ -56,9 +56,9 @@ const Header = () => {
           </button>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            style={{ background: "none", border: "none", cursor: "pointer" }}
+            style={{ background: "none", border: "none", cursor: "pointer", color: "#000" }}
           >
-            {menuOpen ? <FiX size={26} /> : <FiMenu size={26} />}
+            {menuOpen ? <FiX size={26} /> : <FiMenu size={26} color="#000" />}
           </button>
         </div>
 
