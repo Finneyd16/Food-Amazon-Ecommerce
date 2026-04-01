@@ -30,8 +30,6 @@ const Header = () => {
     <nav style={{
       backgroundColor: "white",
       padding: "12px 20px",
-      boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-      position: "sticky",
       top: 0,
       zIndex: 1000,
     }}>
@@ -39,7 +37,7 @@ const Header = () => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        maxWidth: "1200px",
+        maxWidth: "1100px",
         margin: "0 auto",
       }}>
         {/* Logo */}
@@ -68,7 +66,7 @@ const Header = () => {
         <ul className="desktop-nav" style={{
           display: "flex",
           alignItems: "center",
-          gap: "24px",
+          gap: "40px",
           listStyle: "none",
           margin: 0,
           padding: 0,
